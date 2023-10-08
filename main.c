@@ -118,7 +118,7 @@ void csupport()
 	printf("\nPhone: +977-9845685245");
 	printf("\nEmail: suppport@example.com");
 	
-	printf("\n\n[1] Homepage");
+	printf("\n\n[1] Back");
 	printf("\n[2] Exit");
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
@@ -126,7 +126,7 @@ void csupport()
 	
 	if(input =='1')
 	{
-		main();
+		menu();
 	}else if(input == '2')
 	{
 		printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
