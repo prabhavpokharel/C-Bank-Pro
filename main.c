@@ -1,6 +1,12 @@
 #include<stdio.h>
 #include<conio.h>
 
+typedef struct
+{
+	long long int phone;
+	char password[30];
+}user;
+
 void login();
 void menu();
 void createacc();
@@ -46,7 +52,21 @@ void main()
 
 void login()
 {
+	file *fp;
+	user usr;
 	
+	system("cls");
+	printf("\t  C-BANK PRO");
+	printf("\n\"Experience Banking, the PRO way\"");
+	printf("\n=================================");
+		
+	printf("\n\nLogin");
+	printf("\n\nEnter your mobile number: +977 ");
+	scanf("%d", &usr.phone);
+	printf("Enter password: ");
+	scanf("%s", usr.password);
+	
+	fp = fopen("account.bin")
 }
 
 void menu()
