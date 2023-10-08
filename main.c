@@ -11,7 +11,7 @@ void main()
 
 void homepage()
 {
-	int input;
+	char input;
 	
 	system("cls");
 	printf("\t  C-BANK PRO");
@@ -68,30 +68,35 @@ void homepage()
 
 void csupport()
 {
-	char home;
+	char input;
 	
 	system("cls");
 	printf("\t  C-BANK PRO");
 	printf("\n\"Experience Banking, the PRO way\"");
 	printf("\n=================================");
 		
-	printf("\n\nCustomer Support");
-	printf("\nAvailable 24/7 in 365 Days");
+	printf("\n\nCustomer Support - Available 24/7 in 365 Days");
 	printf("\n\nHotline: +977-1-2345678");
 	printf("\nToll-Free: 1660-1-2345678");
 	printf("\nPhone: +977-9845685245");
+	printf("\nEmail: suppport@example.com");
 	
-	printf("\n\nEnter H to go to HOMEPAGE: ");
+	printf("\n\n[1] Homepage");
+	printf("\n[2] Exit");
+	printf("\n\nEnter your choice: ");
 	fflush(stdin);
-	home = getch();
+	input = getch();
 	
-	if(home =='h' || home == 'H')
+	if(input =='1')
 	{
 		homepage();
+	}else if(input == '2')
+	{
+		printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
+		getch();
 	}else
 	{
-		printf("Invalid Input");
-		getch();
+		printf("\nError: Option not available");
 	}
 }
 
