@@ -9,18 +9,14 @@ struct account{
 	char firstname[100],lastname[100],password[MAX_PASSWORD_LENGTH];
 	long long int phone;
 };
-struct user
-{
-	long long int phone;
-	char password[30];
-}u;
 
 void header();
 void login();
 void logpassword(struct account);
-void menu(long long int);
+void menu(struct account);
 void createacc();
-void csupport(long long int);
+void csupport(struct account);
+void footer();
 
 void main()
 {
@@ -49,8 +45,7 @@ void main()
 			break;
 			
 		case '3':
-			printf("\n\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
-			getch();
+			footer();
 			break;
 			
 		default:
@@ -62,9 +57,11 @@ void main()
 void login()
 {
 	FILE *fptr;
+	
 	long long int phn;
 	char pw[30];
 	struct account a;
+	
 	header();
 		
 	printf("\n\nLogin");
@@ -81,7 +78,7 @@ void login()
 	{
 		if((a.phone==phn) && (strcmp(a.password,pw)==0))
 		{
-			menu(phn);
+			menu(a);
 		}
 		else
 		{
@@ -92,14 +89,14 @@ void login()
 	fclose(fptr);
 }
 
-void menu(long long int phn)
+void menu(struct account a)
 {
 	char input;
 	
 	header();
 		
-	printf("\n\nWelcome usersName,");
-	printf("\n[1] Deposit Cash");
+	printf("\n\nWelcome %s,", a.firstname);
+	printf("\n\n[1] Deposit Cash");
 	printf("\n[2] Withdraw Cash");
 	printf("\n[3] Balance Inquiry");
 	printf("\n[4] Transaction History");
@@ -125,12 +122,11 @@ void menu(long long int phn)
 			break;
 			
 		case '5':
-			csupport(phn);
+			csupport(a);
 			break;			
 			
 		case '6':
-			printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
-			getch();
+			footer();
 			break;
 			
 		default:
@@ -140,17 +136,20 @@ void menu(long long int phn)
 
 void createacc()
 {
+	system("cls");
 	struct account a;
+	
+	header();
 	
 	printf("\n\nEnter first name: ");
 	fflush(stdin);
 	scanf("%s",a.firstname);
 	
-	printf("\nEnter last name: ");
+	printf("Enter last name: ");
 	fflush(stdin);
 	scanf("%s",a.lastname);
 	
-	printf("\nEnter Mobile No.: ");
+	printf("Enter Mobile No.: ");
 	scanf("%lld",&a.phone);
 	
 	logpassword(a);
@@ -164,7 +163,7 @@ void logpassword(struct account a)
 	
 	fp=fopen("accounts.bin","wb");
 	
-	printf("\nEnter password: ");
+	printf("Enter password: ");
 	
 	while (1) 
 	{
@@ -197,7 +196,7 @@ void logpassword(struct account a)
     }
     a.password[i] = '\0';
 	
-	printf("\nConfirm password: ");
+	printf("Confirm password: ");
 	while (1) 
 	{
         ch = getch();
@@ -246,7 +245,7 @@ void logpassword(struct account a)
 	}
 }
 
-void csupport(long long int phn)
+void csupport(struct account a)
 {
 	char input;
 	
@@ -266,11 +265,10 @@ void csupport(long long int phn)
 	
 	if(input =='1')
 	{
-		menu(phn);
+		menu(a);
 	}else if(input == '2')
 	{
-		printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
-		getch();
+		footer();
 	}else
 	{
 		printf("\nError: Option not available");
@@ -283,5 +281,12 @@ void header()
 	printf("\t  C-BANK PRO");
 	printf("\n\"Experience Banking, the PRO way\"");
 	printf("\n=================================");
+}
+
+void footer()
+{
+	system("cls");
+	printf("Thanks for trusting C-Bank Pro. Safe Banking, Safe Life.");
+	sleep(1);
 }
 
