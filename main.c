@@ -1,15 +1,12 @@
 #include<stdio.h>
 #include<conio.h>
 
-void homepage();
+void login();
+void menu();
+void createacc();
 void csupport();
 
 void main()
-{
-	homepage();
-}
-
-void homepage()
 {
 	char input;
 	
@@ -21,12 +18,53 @@ void homepage()
 	printf("\n\nHomepage");
 	printf("\n\n[1] Login");
 	printf("\n[2] Create an Account");
-	printf("\n[3] Deposit Cash");
-	printf("\n[4] Withdraw Cash");
-	printf("\n[5] Balance Inquiry");
-	printf("\n[6] Transaction History");
-	printf("\n[7] Customer Support");
-	printf("\n[8] Exit");	
+	printf("\n[3] Exit");	
+	
+	printf("\n\nEnter your choice: ");
+	fflush(stdin);
+	input = getch();
+	
+	switch(input)
+	{
+		case '1':
+			login();
+			break;
+			
+		case '2':
+			createacc();
+			break;
+			
+		case '3':
+			printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
+			getch();
+			break;
+			
+		default:
+			printf("\nError: Option not available");
+	}
+}
+
+void login()
+{
+	
+}
+
+void menu()
+{
+	char input;
+	
+	system("cls");
+	printf("\t  C-BANK PRO");
+	printf("\n\"Experience Banking, the PRO way\"");
+	printf("\n=================================");
+		
+	printf("\n\nWelcome usersName,");
+	printf("\n[1] Deposit Cash");
+	printf("\n[2] Withdraw Cash");
+	printf("\n[3] Balance Inquiry");
+	printf("\n[4] Transaction History");
+	printf("\n[5] Customer Support");
+	printf("\n[6] Exit");	
 	
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
@@ -47,16 +85,10 @@ void homepage()
 			break;
 			
 		case '5':
-			break;
-		
-		case '6':
-			break;
-			
-		case '7':
 			csupport();
-			break;
+			break;			
 			
-		case '8':
+		case '6':
 			printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
 			getch();
 			break;
@@ -64,6 +96,11 @@ void homepage()
 		default:
 			printf("\nError: Option not available");
 	}
+}
+
+void createacc()
+{
+	
 }
 
 void csupport()
@@ -89,7 +126,7 @@ void csupport()
 	
 	if(input =='1')
 	{
-		homepage();
+		main();
 	}else if(input == '2')
 	{
 		printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
