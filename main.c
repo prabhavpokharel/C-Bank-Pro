@@ -1,6 +1,14 @@
 #include<stdio.h>
 #include<conio.h>
+#include<string.h>
+#include<ctype.h>
 
+#define MAX_PASSWORD_LENGTH 20
+
+struct account{
+	char firstname[100],lastname[100],password[MAX_PASSWORD_LENGTH];
+	long long int phone;
+};
 struct user
 {
 	long long int phone;
@@ -9,6 +17,7 @@ struct user
 
 void header();
 void login();
+void logpassword(struct account);
 void menu(long long int);
 void createacc();
 void csupport(long long int);
@@ -55,7 +64,7 @@ void login()
 	FILE *fptr;
 	long long int phn;
 	char pw[30];
-	
+	struct account a;
 	header();
 		
 	printf("\n\nLogin");
@@ -66,14 +75,15 @@ void login()
 	fflush(stdin);
 	scanf("%s", pw);
 	
-	fptr = fopen("userlogin.txt", "r");
+	fptr = fopen("accounts.bin", "rb");
 	
-	while(&u, sizeof(u), 1, fptr)
+	while(fread(&a, sizeof(a), 1, fptr)!=0)
 	{
-		if((u.phone==phn) && (strcmp(u.password,pw)==0))
+		if((a.phone==phn) && (strcmp(a.password,pw)==0))
 		{
 			menu(phn);
-		}else
+		}
+		else
 		{
 			printf("\nUser not found");
 		}
@@ -130,7 +140,110 @@ void menu(long long int phn)
 
 void createacc()
 {
+	struct account a;
 	
+	printf("\n\nEnter first name: ");
+	fflush(stdin);
+	scanf("%s",a.firstname);
+	
+	printf("\nEnter last name: ");
+	fflush(stdin);
+	scanf("%s",a.lastname);
+	
+	printf("\nEnter Mobile No.: ");
+	scanf("%lld",&a.phone);
+	
+	logpassword(a);
+}
+
+void logpassword(struct account a)
+{
+	FILE *fp;
+	int i=0,j=0;
+	char finalpw[MAX_PASSWORD_LENGTH],ch;
+	
+	fp=fopen("accounts.bin","wb");
+	
+	printf("\nEnter password: ");
+	
+	while (1) 
+	{
+        ch = getch();
+        if (ch == 13)
+		{
+            break;
+        }
+		else if (ch == 8 || ch == 127)
+		{
+            if (i > 0)
+			{
+                i--;
+                printf("\b \b");
+            }
+        }
+		else if (!isspace(ch)) 
+		{
+            if (i < MAX_PASSWORD_LENGTH - 1)
+			{
+                putchar('*');
+                a.password[i] = ch;
+                i++;
+            } 
+			else
+			{
+				
+            }
+        }
+    }
+    a.password[i] = '\0';
+	
+	printf("\nConfirm password: ");
+	while (1) 
+	{
+        ch = getch();
+        if (ch == 13)
+		{
+            break;
+        }
+		else if (ch == 8 || ch == 127)
+		{
+            if (j > 0)
+			{
+                j--;
+                printf("\b \b");
+            }
+        }
+		else if (!isspace(ch)) 
+		{
+            if (j < MAX_PASSWORD_LENGTH - 1)
+			{
+                putchar('*');
+                finalpw[j] = ch;
+                j++;
+            } 
+			else
+			{
+				
+            }
+        }
+    }
+    finalpw[j] = '\0';
+	
+	if(strcmp(a.password,finalpw)!=0)
+	{
+		printf("\n\nPasswords do not match. Please try again");
+		fclose(fp);
+		logpassword(a);
+	}
+	else
+	{
+		fwrite(&a,sizeof(a),1,fp);
+		fclose(fp);
+		printf("\n\nRedirecting to login page...");
+		sleep(1);
+		system("cls");
+		login();
+	}
 }
 
 void csupport(long long int phn)
