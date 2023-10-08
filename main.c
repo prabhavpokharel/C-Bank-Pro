@@ -52,7 +52,7 @@ void main()
 
 void login()
 {
-	file *fp;
+	FILE *fptr;
 	user usr;
 	
 	system("cls");
@@ -66,7 +66,8 @@ void login()
 	printf("Enter password: ");
 	scanf("%s", usr.password);
 	
-	fp = fopen("account.bin")
+	fptr = fopen("userlogin.txt", "r");
+	fclose(fptr);
 }
 
 void menu()
