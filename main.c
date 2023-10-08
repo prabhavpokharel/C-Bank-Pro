@@ -1,31 +1,30 @@
 #include<stdio.h>
 #include<conio.h>
 
-typedef struct
+struct user
 {
 	long long int phone;
 	char password[30];
-}user;
+}u;
 
+void header();
 void login();
-void menu();
+void menu(long long int);
 void createacc();
-void csupport();
+void csupport(long long int);
 
 void main()
 {
 	char input;
 	
-	system("cls");
-	printf("\t  C-BANK PRO");
-	printf("\n\"Experience Banking, the PRO way\"");
-	printf("\n=================================");
-		
+	header();
+	
 	printf("\n\nHomepage");
 	printf("\n\n[1] Login");
 	printf("\n[2] Create an Account");
 	printf("\n[3] Exit");	
 	
+	tryagain:
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	input = getch();
@@ -41,43 +40,53 @@ void main()
 			break;
 			
 		case '3':
-			printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
+			printf("\n\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
 			getch();
 			break;
 			
 		default:
 			printf("\nError: Option not available");
+			goto tryagain;
 	}
 }
 
 void login()
 {
 	FILE *fptr;
-	user usr;
+	long long int phn;
+	char pw[30];
 	
-	system("cls");
-	printf("\t  C-BANK PRO");
-	printf("\n\"Experience Banking, the PRO way\"");
-	printf("\n=================================");
+	header();
 		
 	printf("\n\nLogin");
 	printf("\n\nEnter your mobile number: +977 ");
-	scanf("%d", &usr.phone);
+	fflush(stdin);
+	scanf("%lld", &phn);
 	printf("Enter password: ");
-	scanf("%s", usr.password);
+	fflush(stdin);
+	scanf("%s", pw);
 	
 	fptr = fopen("userlogin.txt", "r");
+	
+	while(&u, sizeof(u), 1, fptr)
+	{
+		if((u.phone==phn) && (strcmp(u.password,pw)==0))
+		{
+			menu(phn);
+		}else
+		{
+			printf("\nUser not found");
+		}
+	}
+	
 	fclose(fptr);
 }
 
-void menu()
+void menu(long long int phn)
 {
 	char input;
 	
-	system("cls");
-	printf("\t  C-BANK PRO");
-	printf("\n\"Experience Banking, the PRO way\"");
-	printf("\n=================================");
+	header();
 		
 	printf("\n\nWelcome usersName,");
 	printf("\n[1] Deposit Cash");
@@ -106,7 +115,7 @@ void menu()
 			break;
 			
 		case '5':
-			csupport();
+			csupport(phn);
 			break;			
 			
 		case '6':
@@ -124,14 +133,11 @@ void createacc()
 	
 }
 
-void csupport()
+void csupport(long long int phn)
 {
 	char input;
 	
-	system("cls");
-	printf("\t  C-BANK PRO");
-	printf("\n\"Experience Banking, the PRO way\"");
-	printf("\n=================================");
+	header();
 		
 	printf("\n\nCustomer Support - Available 24/7 in 365 Days");
 	printf("\n\nHotline: +977-1-2345678");
@@ -147,7 +153,7 @@ void csupport()
 	
 	if(input =='1')
 	{
-		menu();
+		menu(phn);
 	}else if(input == '2')
 	{
 		printf("\nThanks for trusting C-Bank Pro. Safe Banking, Safe Life!");
@@ -158,4 +164,11 @@ void csupport()
 	}
 }
 
+void header()
+{
+	system("cls");
+	printf("\t  C-BANK PRO");
+	printf("\n\"Experience Banking, the PRO way\"");
+	printf("\n=================================");
+}
 
