@@ -58,10 +58,11 @@ void login()
 {
 	FILE *fptr;
 	
+	int j=0;
 	long long int phn;
-	char pw[30];
+	char pw[MAX_PASSWORD_LENGTH], ch;
 	struct account a;
-	
+
 	header();
 		
 	printf("\n\nLogin");
@@ -70,7 +71,36 @@ void login()
 	scanf("%lld", &phn);
 	printf("Enter password: ");
 	fflush(stdin);
-	scanf("%s", pw);
+	while (1) 
+	{
+        ch = getch();
+        if (ch == 13)
+		{
+            break;
+        }
+		else if (ch == 8 || ch == 127)
+		{
+            if (j > 0)
+			{
+                j--;
+                printf("\b \b");
+            }
+        }
+		else if (!isspace(ch)) 
+		{
+            if (j < MAX_PASSWORD_LENGTH - 1)
+			{
+                putchar('*');
+                pw[j] = ch;
+                j++;
+            } 
+			else
+			{
+				
+            }
+        }
+    }
+    pw[j] = '\0';
 	
 	fptr = fopen("accounts.bin", "rb");
 	
@@ -165,7 +195,7 @@ void logpassword(struct account a)
 	
 	printf("Enter password: ");
 	
-	while (1) 
+    while (1) 
 	{
         ch = getch();
         if (ch == 13)
@@ -197,6 +227,7 @@ void logpassword(struct account a)
     a.password[i] = '\0';
 	
 	printf("Confirm password: ");
+
 	while (1) 
 	{
         ch = getch();
