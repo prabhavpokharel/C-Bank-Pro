@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<string.h>
 #include<ctype.h>
+#include<stdlib.h>
 
 #define MAX_PASSWORD_LENGTH 30
 
@@ -17,25 +18,26 @@ void logpassword(struct account);
 void menu(struct account);
 void createacc();
 void balanceInq(struct account);
+void deposit(struct account *);
 void csupport(struct account);
-void footer();
+void exitMessage();
 
 void main()
 {
-	char input;
+	char choice;
 	
 	header();
 	
-	printf("\n\nHomepage");
+	printf("Homepage");
 	printf("\n\n[1] Login");
 	printf("\n[2] Create an Account");
 	printf("\n[3] Exit");	
 	
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
-	input = getch();
+	choice = getch();
 	
-	switch(input)
+	switch(choice)
 	{
 		case '1':
 			login();
@@ -46,7 +48,7 @@ void main()
 			break;
 			
 		case '3':
-			footer();
+			exitMessage();
 			break;
 			
 		default:
@@ -56,78 +58,95 @@ void main()
 
 void login()
 {
-	FILE *fptr;
-	
-	int j=0;
-	long long int phn;
-	char pw[MAX_PASSWORD_LENGTH], ch;
-	struct account a;
+    FILE *fptr;
+    int j = 0;
+    long long int phn;
+    char pw[MAX_PASSWORD_LENGTH], ch;
+    struct account a;
 
-	header();
-		
-	printf("\n\nLogin");
-	printf("\n\nEnter your mobile number: +977 ");
-	fflush(stdin);
-	scanf("%lld", &phn);
-	printf("Enter password: ");
-	fflush(stdin);
-	while (1) 
-	{
+    header();
+
+    printf("Login");
+    printf("\n\nEnter your mobile number: +977 ");
+    fflush(stdin);
+    scanf("%lld", &phn);
+    printf("Enter password: ");
+    fflush(stdin);
+    while (1)
+    {
         ch = getch();
         if (ch == 13)
-		{
+        {
             break;
         }
-		else if (ch == 8 || ch == 127)
-		{
+        else if (ch == 8 || ch == 127)
+        {
             if (j > 0)
-			{
+            {
                 j--;
                 printf("\b \b");
             }
         }
-		else if (!isspace(ch)) 
-		{
+        else if (!isspace(ch))
+        {
             if (j < MAX_PASSWORD_LENGTH - 1)
-			{
+            {
                 putchar('*');
                 pw[j] = ch;
                 j++;
-            } 
-			else
-			{
-				
+            }
+            else
+            {
+                
             }
         }
     }
     pw[j] = '\0';
-	
-	fptr = fopen("accounts.bin", "rb");
-	
-	while(fread(&a, sizeof(a), 1, fptr)!=0)
-	{
-		if((a.phone==phn) && (strcmp(a.password,pw)==0))
-		{
-			menu(a);
-		}
-		else
-		{
-			printf("\n\nUser not found.");
-			sleep(1);
-			login();
-		}
-	}
-	
-	fclose(fptr);
+
+    fptr = fopen("accounts.bin", "rb");
+
+    int userFound = 0; 
+
+    while (fread(&a, sizeof(struct account), 1, fptr) != 0)
+    {
+        if ((a.phone == phn) && (strcmp(a.password, pw) == 0))
+        {
+            menu(a);
+            userFound = 1; 
+            break; 
+        }
+    }
+
+    fclose(fptr);
+
+    if (!userFound)
+    {
+        printf("\n\nUser not found.");
+        sleep(1);
+        
+        printf("\n[1] Retry Login");
+        printf("\n[2] Homepage");
+        printf("\n\nEnter your choice: ");
+        fflush(stdin);
+        char choice = getch();
+        if (choice == '1')
+        {
+            login(); 
+        }
+        else if (choice == '2')
+        {
+            main(); 
+        }
+    }
 }
 
 void menu(struct account a)
 {
-	char input;
+	char choice;
 	
 	header();
 		
-	printf("\n\nWelcome %s,", a.firstname);
+	printf("Welcome %s,", a.firstname);
 	printf("\n\n[1] Deposit Cash");
 	printf("\n[2] Withdraw Cash");
 	printf("\n[3] Balance Inquiry");
@@ -137,11 +156,12 @@ void menu(struct account a)
 	
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
-	input = getch();
+	choice = getch();
 	
-	switch(input)
+	switch(choice)
 	{
 		case '1':
+			deposit(&a);
 			break;
 			
 		case '2':
@@ -159,7 +179,7 @@ void menu(struct account a)
 			break;			
 			
 		case '6':
-			footer();
+			exitMessage();
 			break;
 			
 		default:
@@ -169,12 +189,11 @@ void menu(struct account a)
 
 void createacc()
 {
-	system("cls");
 	struct account a;
 	
 	header();
 	
-	printf("\n\nEnter first name: ");
+	printf("Enter first name: ");
 	fflush(stdin);
 	scanf("%s",a.firstname);
 	
@@ -285,35 +304,59 @@ void balanceInq(struct account a)
 {
 	header();
 	
-	char input;
+	char choice;
 	
-	printf("\n\nAvailable Balance: %lf", a.balance);
+	printf("Available Balance: %lf", a.balance);
 	
 	printf("\n\n[1] Back");
 	printf("\n[2] Exit");
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
-	input = getch();
+	choice = getch();
 	
-	if(input =='1')
+	if(choice =='1')
 	{
 		menu(a);
-	}else if(input == '2')
+	}else if(choice == '2')
 	{
-		footer();
+		exitMessage();
 	}else
 	{
 		balanceInq(a);
 	}
 }
 
+void deposit(struct account *a)
+{
+	FILE *fptr;
+	header();
+	int amount;
+	
+	printf("Enter the amount you want to deposit: ");
+	scanf("%d", &amount);
+	
+	a->balance += (double)amount;
+	
+	fptr = fopen("accounts.bin", "rb+");
+
+    fseek(fptr, -sizeof(struct account), SEEK_CUR);
+
+    fwrite(a, sizeof(struct account), 1, fptr);
+    fclose(fptr);
+	
+	printf("Your amount has been successfully deposited!");
+	sleep(1);
+	
+	balanceInq(*a);
+}
+
 void csupport(struct account a)
 {
-	char input;
+	char choice;
 	
 	header();
 		
-	printf("\n\nCustomer Support - Available 24/7 in 365 Days");
+	printf("Customer Support - Available 24/7 in 365 Days");
 	printf("\n\nHotline: +977-1-2345678");
 	printf("\nToll-Free: 1660-1-2345678");
 	printf("\nPhone: +977-9845685245");
@@ -323,14 +366,14 @@ void csupport(struct account a)
 	printf("\n[2] Exit");
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
-	input = getch();
+	choice = getch();
 	
-	if(input =='1')
+	if(choice =='1')
 	{
 		menu(a);
-	}else if(input == '2')
+	}else if(choice == '2')
 	{
-		footer();
+		exitMessage();
 	}else
 	{
 		csupport(a);
@@ -342,12 +385,14 @@ void header()
 	system("cls");
 	printf("\t  C-BANK PRO");
 	printf("\n\"Experience Banking, the PRO way\"");
-	printf("\n=================================");
+	printf("\n=================================\n\n");
 }
 
-void footer()
+void exitMessage()
 {
-	system("cls");
+	header();
+	
 	printf("Thanks for trusting C-Bank Pro. Safe Banking, Safe Life.");
 	sleep(1);
+	exit(1);
 }
