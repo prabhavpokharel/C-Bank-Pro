@@ -31,7 +31,6 @@ void main()
 	printf("\n[2] Create an Account");
 	printf("\n[3] Exit");	
 	
-	tryagain:
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	input = getch();
@@ -51,8 +50,7 @@ void main()
 			break;
 			
 		default:
-			printf("\nError: Option not available");
-			goto tryagain;
+			main();
 	}
 }
 
@@ -114,7 +112,9 @@ void login()
 		}
 		else
 		{
-			printf("\nUser not found");
+			printf("\n\nUser not found.");
+			sleep(1);
+			login();
 		}
 	}
 	
@@ -163,7 +163,7 @@ void menu(struct account a)
 			break;
 			
 		default:
-			printf("\nError: Option not available");
+			menu(a);
 	}
 }
 
@@ -295,7 +295,6 @@ void balanceInq(struct account a)
 	fflush(stdin);
 	input = getch();
 	
-	tryagain:
 	if(input =='1')
 	{
 		menu(a);
@@ -304,8 +303,7 @@ void balanceInq(struct account a)
 		footer();
 	}else
 	{
-		printf("\nError: Option not available");
-		goto tryagain;
+		balanceInq(a);
 	}
 }
 
@@ -335,7 +333,7 @@ void csupport(struct account a)
 		footer();
 	}else
 	{
-		printf("\nError: Option not available");
+		csupport(a);
 	}
 }
 
