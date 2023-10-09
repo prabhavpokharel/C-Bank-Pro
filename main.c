@@ -33,7 +33,6 @@ void main()
 	printf("\n[2] Create an Account");
 	printf("\n[3] Exit");	
 	
-	tryagain:
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	input = getch();
@@ -53,8 +52,120 @@ void main()
 			break;
 			
 		default:
-			printf("\nError: Option not available");
-			goto tryagain;
+			main();
+	}
+}
+
+void login()
+{
+	FILE *fptr;
+	
+	int j=0;
+	long long int phn;
+	char pw[MAX_PASSWORD_LENGTH], ch;
+	struct account a;
+
+	header();
+		
+	printf("\n\nLogin");
+	printf("\n\nEnter your mobile number: +977 ");
+	fflush(stdin);
+	scanf("%lld", &phn);
+	printf("Enter password: ");
+	fflush(stdin);
+	while (1) 
+	{
+        ch = getch();
+        if (ch == 13)
+		{
+            break;
+        }
+		else if (ch == 8 || ch == 127)
+		{
+            if (j > 0)
+			{
+                j--;
+                printf("\b \b");
+            }
+        }
+		else if (!isspace(ch)) 
+		{
+            if (j < MAX_PASSWORD_LENGTH - 1)
+			{
+                putchar('*');
+                pw[j] = ch;
+                j++;
+            } 
+			else
+			{
+				
+            }
+        }
+    }
+    pw[j] = '\0';
+	
+	fptr = fopen("accounts.bin", "rb");
+	
+	while(fread(&a, sizeof(a), 1, fptr)!=0)
+	{
+		if((a.phone==phn) && (strcmp(a.password,pw)==0))
+		{
+			menu(a);
+		}
+		else
+		{
+			printf("\n\nUser not found.");
+			sleep(1);
+			login();
+		}
+	}
+	
+	fclose(fptr);
+}
+
+void menu(struct account a)
+{
+	char input;
+	
+	header();
+		
+	printf("\n\nWelcome %s,", a.firstname);
+	printf("\n\n[1] Deposit Cash");
+	printf("\n[2] Withdraw Cash");
+	printf("\n[3] Balance Inquiry");
+	printf("\n[4] Transaction History");
+	printf("\n[5] Customer Support");
+	printf("\n[6] Exit");	
+	
+	printf("\n\nEnter your choice: ");
+	fflush(stdin);
+	input = getch();
+	
+	switch(input)
+	{
+		case '1':
+			break;
+			
+		case '2':
+			break;
+			
+		case '3':
+			balanceInq(a);
+			break;
+			
+		case '4':
+			break;
+			
+		case '5':
+			csupport(a);
+			break;			
+			
+		case '6':
+			footer();
+			break;
+			
+		default:
+			menu(a);
 	}
 }
 
@@ -296,7 +407,6 @@ void balanceInq(struct account a)
 	fflush(stdin);
 	input = getch();
 	
-	tryagain:
 	if(input =='1')
 	{
 		menu(a);
@@ -305,8 +415,7 @@ void balanceInq(struct account a)
 		exitMessage();
 	}else
 	{
-		printf("\nError: Option not available");
-		goto tryagain;
+		balanceInq(a);
 	}
 }
 
@@ -360,7 +469,7 @@ void csupport(struct account a)
 		exitMessage();
 	}else
 	{
-		printf("\nError: Option not available");
+		csupport(a);
 	}
 }
 
