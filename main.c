@@ -3,11 +3,12 @@
 #include<string.h>
 #include<ctype.h>
 
-#define MAX_PASSWORD_LENGTH 20
+#define MAX_PASSWORD_LENGTH 30
 
 struct account{
-	char firstname[100],lastname[100],password[MAX_PASSWORD_LENGTH];
+	char firstname[100], lastname[100], password[MAX_PASSWORD_LENGTH];
 	long long int phone;
+	double balance;
 };
 
 void header();
@@ -15,6 +16,7 @@ void login();
 void logpassword(struct account);
 void menu(struct account);
 void createacc();
+void balanceInq(struct account);
 void csupport(struct account);
 void footer();
 
@@ -146,6 +148,7 @@ void menu(struct account a)
 			break;
 			
 		case '3':
+			balanceInq(a);
 			break;
 			
 		case '4':
@@ -182,6 +185,8 @@ void createacc()
 	printf("Enter Mobile No.: ");
 	scanf("%lld",&a.phone);
 	
+	a.balance = 0.0;
+	
 	logpassword(a);
 }
 
@@ -191,9 +196,9 @@ void logpassword(struct account a)
 	int i=0,j=0;
 	char finalpw[MAX_PASSWORD_LENGTH],ch;
 	
-	fp=fopen("accounts.bin","wb");
+	fp=fopen("accounts.bin","ab");
 	
-	printf("Enter password: ");
+	printf("\nEnter password: ");
 	
     while (1) 
 	{
@@ -226,7 +231,7 @@ void logpassword(struct account a)
     }
     a.password[i] = '\0';
 	
-	printf("Confirm password: ");
+	printf("\nConfirm password: ");
 
 	while (1) 
 	{
@@ -273,6 +278,34 @@ void logpassword(struct account a)
 		sleep(1);
 		system("cls");
 		login();
+	}
+}
+
+void balanceInq(struct account a)
+{
+	header();
+	
+	char input;
+	
+	printf("\n\nAvailable Balance: %lf", a.balance);
+	
+	printf("\n\n[1] Back");
+	printf("\n[2] Exit");
+	printf("\n\nEnter your choice: ");
+	fflush(stdin);
+	input = getch();
+	
+	tryagain:
+	if(input =='1')
+	{
+		menu(a);
+	}else if(input == '2')
+	{
+		footer();
+	}else
+	{
+		printf("\nError: Option not available");
+		goto tryagain;
 	}
 }
 
