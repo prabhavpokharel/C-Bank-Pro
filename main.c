@@ -16,6 +16,7 @@ void header();
 void login();
 void logpassword(struct account);
 void menu(struct account);
+void withdraw(struct account *);
 void createacc();
 void balanceInq(struct account);
 void deposit(struct account *);
@@ -165,6 +166,7 @@ void menu(struct account a)
 			break;
 			
 		case '2':
+			withdraw(&a);
 			break;
 			
 		case '3':
@@ -339,12 +341,46 @@ void deposit(struct account *a)
 	
 	fptr = fopen("accounts.bin", "rb+");
 
-    fseek(fptr, -sizeof(struct account), SEEK_CUR);
+    fseek(fptr, 0L, SEEK_CUR);
 
     fwrite(a, sizeof(struct account), 1, fptr);
     fclose(fptr);
 	
 	printf("Your amount has been successfully deposited!");
+	sleep(1);
+	
+	balanceInq(*a);
+}
+
+void withdraw(struct account *a)
+{
+	FILE *fptr;
+	header();
+	int amount;
+	
+	amountinput:
+	printf("Enter the amount you want to withdraw: ");
+	scanf("%d", &amount);
+	
+	if((double)amount>a->balance)
+	{
+		printf("\n\nThe entered amount exceeds your bank balance. Please try again.");
+		sleep(1);
+		system("cls");
+		header();
+		goto amountinput;
+	}
+	
+	a->balance -= (double)amount;
+	
+	fptr = fopen("accounts.bin", "rb+");
+
+    fseek(fptr, 0L, SEEK_CUR);
+
+    fwrite(a, sizeof(struct account), 1, fptr);
+    fclose(fptr);
+	
+	printf("Your amount has been successfully withdrawn!");
 	sleep(1);
 	
 	balanceInq(*a);
