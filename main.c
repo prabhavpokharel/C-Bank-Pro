@@ -5,10 +5,15 @@
 #include<stdlib.h>
 
 #define MAX_PASSWORD_LENGTH 30
+#define MAX_TRANSACTION_LIMIT 100
 
+struct trnhistory{
+	int depo, with;
+};
 struct account{
 	char firstname[100], lastname[100], password[MAX_PASSWORD_LENGTH];
 	long long int phone;
+	struct trnhistory t[MAX_TRANSACTION_LIMIT];
 	double balance;
 };
 
@@ -18,6 +23,7 @@ void logpassword(struct account);
 void menu(struct account);
 void withdraw(struct account *);
 void createacc();
+void history(struct account *,int,int);
 void balanceInq(struct account);
 void deposit(struct account *);
 void csupport(struct account);
@@ -336,7 +342,7 @@ void deposit(struct account *a)
 	
 	printf("Enter the amount you want to deposit: ");
 	scanf("%d", &amount);
-	
+	history(a,0,amount);
 	a->balance += (double)amount;
 	
 	fptr = fopen("accounts.bin", "rb+");
@@ -370,7 +376,7 @@ void withdraw(struct account *a)
 		header();
 		goto amountinput;
 	}
-	
+	history(a,1,amount);
 	a->balance -= (double)amount;
 	
 	fptr = fopen("accounts.bin", "rb+");
@@ -386,6 +392,34 @@ void withdraw(struct account *a)
 	balanceInq(*a);
 }
 
+void history(struct account *a, int n, int amount)
+{
+	int i=0;
+	if(n==0)
+	{
+		while(i<MAX_TRANSACTION_LIMIT)
+		{
+			if (a->t[i].depo==0)
+        	{
+            	a->t[i].depo = amount;
+            	break;
+        	}
+        	i++;
+		}
+	}
+	else if(n==1)
+	{
+		while(i<MAX_TRANSACTION_LIMIT)
+		{
+			if (a->t[i].with==0)
+        	{
+            	a->t[i].with = amount;
+            	break;
+        	}
+        	i++;
+		}
+	}
+}
 void csupport(struct account a)
 {
 	char choice;
