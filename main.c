@@ -3,6 +3,7 @@
 #include<string.h>
 #include<ctype.h>
 #include<stdlib.h>
+#include<windows.h>
 
 #define MAX_PASSWORD_LENGTH 30
 #define MAX_TRANSACTION_LIMIT 100
@@ -10,6 +11,7 @@
 struct trnhistory{
 	int depo, with;
 };
+
 struct account{
 	char firstname[100], lastname[100], password[MAX_PASSWORD_LENGTH];
 	long long int phone;
@@ -26,6 +28,7 @@ void createacc();
 void history(struct account *,int,int);
 void balanceInq(struct account);
 void deposit(struct account *);
+void transfer(struct account *);
 void csupport(struct account);
 void exitMessage();
 
@@ -160,8 +163,9 @@ void menu(struct account a)
 	printf("\n[2] Withdraw Cash");
 	printf("\n[3] Balance Inquiry");
 	printf("\n[4] Transaction History");
-	printf("\n[5] Customer Support");
-	printf("\n[6] Exit");	
+	printf("\n[5] Transfer");
+	printf("\n[6] Customer Support");
+	printf("\n[7] Exit");	
 	
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
@@ -185,10 +189,14 @@ void menu(struct account a)
 			break;
 			
 		case '5':
+			transfer(&a);
+			break;
+			
+		case '6':
 			csupport(a);
 			break;			
 			
-		case '6':
+		case '7':
 			exitMessage();
 			break;
 			
@@ -393,7 +401,7 @@ void withdraw(struct account *a)
 	history(a,1,amount);
 	a->balance -= (double)amount;
 	
-	fptr = fopen(strcat(filename, ".bin"), "rb+");
+	fptr = fopen(filename, "rb+");
 
     fseek(fptr, 0L, SEEK_CUR);
 
@@ -434,6 +442,61 @@ void history(struct account *a, int n, int amount)
 		}
 	}
 }
+
+void transfer(struct account *a)
+{
+	FILE *fptr1, *fptr2;
+	struct account b;
+	char filename[60];
+	long long int phn;
+	double amount;
+	
+	header();
+	
+	sprintf(filename, "%lld.bin", a->phone);
+	
+	printf("Transfer from +977 %lld", a->phone);
+	printf("\n\nEnter Receiver's Mobile Number: +977 ");
+	scanf("%lld", &phn);
+	
+	amountinput:
+	printf("Enter transfer amount: ");
+	scanf("%lf", &amount);
+	
+	if(amount>a->balance)
+	{
+		printf("\n\nThe entered amount exceeds your bank balance. Please try again.");
+		sleep(1);
+		header();
+		goto amountinput;
+	}
+	
+	a->balance -= amount;
+	
+	fptr1 = fopen(filename, "rb+");
+    
+	fseek(fptr1, 0L, SEEK_CUR);
+    fwrite(a, sizeof(struct account), 1, fptr1);
+    
+	fclose(fptr1);
+	
+	sprintf(filename, "%lld.bin", phn);
+	fptr2 = fopen(filename, "rb+");
+    
+    fread(&b, sizeof(struct account), 1, fptr2);
+    b.balance += amount;
+    
+	fseek(fptr2, 0L, SEEK_SET);
+    fwrite(&b, sizeof(struct account), 1, fptr2);
+    
+	fclose(fptr2);
+	
+	printf("\nYour amount has been successfully transfered!");
+	sleep(1);
+	
+	balanceInq(*a);
+}
+
 void csupport(struct account a)
 {
 	char choice;
