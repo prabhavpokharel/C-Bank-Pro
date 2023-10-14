@@ -68,7 +68,7 @@ void login()
     FILE *fptr;
     int j = 0;
     long long int phn;
-    char pw[MAX_PASSWORD_LENGTH], ch;
+    char pw[MAX_PASSWORD_LENGTH], ch, filename[60];
     struct account a;
 
     header();
@@ -109,8 +109,10 @@ void login()
         }
     }
     pw[j] = '\0';
+    
+    sprintf(filename, "%lld.bin", phn);
 
-    fptr = fopen("accounts.bin", "rb");
+    fptr = fopen(filename, "rb");
 
     int userFound = 0; 
 
@@ -221,9 +223,11 @@ void logpassword(struct account a)
 {
 	FILE *fp;
 	int i=0,j=0;
-	char finalpw[MAX_PASSWORD_LENGTH],ch;
+	char finalpw[MAX_PASSWORD_LENGTH], ch, filename[60];
 	
-	fp=fopen("accounts.bin","ab");
+	sprintf(filename, "%lld.bin", a.phone);
+	
+	fp = fopen(filename,"ab");
 	
 	printf("\nEnter password: ");
 	
@@ -337,15 +341,20 @@ void balanceInq(struct account a)
 void deposit(struct account *a)
 {
 	FILE *fptr;
+	
 	header();
+	
 	int amount;
+	char filename[60];
+	
+	sprintf(filename, "%lld.bin", a->phone);
 	
 	printf("Enter the amount you want to deposit: ");
 	scanf("%d", &amount);
 	history(a,0,amount);
 	a->balance += (double)amount;
 	
-	fptr = fopen("accounts.bin", "rb+");
+	fptr = fopen(filename, "rb+");
 
     fseek(fptr, 0L, SEEK_CUR);
 
@@ -361,8 +370,13 @@ void deposit(struct account *a)
 void withdraw(struct account *a)
 {
 	FILE *fptr;
+	
 	header();
+	
 	int amount;
+	char filename[60];
+	
+	sprintf(filename, "%lld.bin", a->phone);
 	
 	amountinput:
 	printf("Enter the amount you want to withdraw: ");
@@ -379,7 +393,7 @@ void withdraw(struct account *a)
 	history(a,1,amount);
 	a->balance -= (double)amount;
 	
-	fptr = fopen("accounts.bin", "rb+");
+	fptr = fopen(strcat(filename, ".bin"), "rb+");
 
     fseek(fptr, 0L, SEEK_CUR);
 
