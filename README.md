@@ -1,3 +1,5 @@
+![C-BANK PRO](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/3bbfe596-e741-432b-a5ac-5c547d566f08)
+
 # C-Bank Pro: Banking System Simulation
 C-Bank Pro is a simple console-based banking application implemented in C. It allows users to create accounts, perform various banking operations, and check their account balance.
 
