@@ -12,17 +12,17 @@ Follow these steps to execute the C-Bank Pro application on your computer:
 	You can either clone this GitHub repository or download it as a ZIP file. If you download it as a ZIP file, extract the contents to a directory of your choice.
 2. **Compile the Code:**
 	Open your Command Prompt (CMD) or Terminal and navigate to the directory where you have saved the C-Bank Pro source code files.
-Compile the code using your C compiler by running the following command:
-```shell
-gcc c_bank_pro.c -o c_bank_pro
-```
-This command compiles the `c_bank_pro.c` source code and generates an executable file named `c_bank_pro`.
+	Compile the code using your C compiler by running the following command:
+	```shell
+	gcc c_bank_pro.c -o c_bank_pro
+	```
+	This command compiles the `c_bank_pro.c` source code and generates an executable file named `c_bank_pro`.
 3. **Run the Application:**
-After successfully compiling the code, you can run the application using the following command:
-```shell
-c_bank_pro
-```
-This command will start the C-Bank Pro application.
+	After successfully compiling the code, you can run the application using the following command:
+	```shell
+	c_bank_pro
+	```
+	This command will start the C-Bank Pro application.
 4. **Using the Application:**
 	- You will be presented with a menu that allows you to create an account, log in, or exit.
 	- Follow the on-screen instructions to navigate through the application, create accounts, log in, and perform banking operations.
