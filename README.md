@@ -1,4 +1,3 @@
-# C-Bank Pro: Banking System Simulation
 C-Bank Pro is a simple console-based banking application implemented in C. It allows users to create accounts, perform various banking operations, and check their account balance.
 
 # Prerequisites
@@ -27,13 +26,13 @@ This command will start the C-Bank Pro application.
 	- You will be presented with a menu that allows you to create an account, log in, or exit.
 	- Follow the on-screen instructions to navigate through the application, create accounts, log in, and perform banking operations.
 
-#Application Workflow
+# Application Workflow
 1. **Create an account: **You can create a new user account by selecting "Create an Account" and following the prompts to enter your information.
 2. **Log in:** If you already have an account, select "Login," enter your phone number, and provide your password to log in.
 3. **Perform banking operations:** Once logged in, you can deposit cash, withdraw cash, check your balance, view transaction history, transfer money to other users, and access customer support.
 4. **Exit: **When you are done using the application, select "Exit" to log out and exit the application.
 
-#Disclaimer
+# Disclaimer
 This application is a simple example and is not suitable for real-world banking applications. It does not provide security measures or data validation, and it's designed for educational purposes only.
 
 Feel free to explore the code and make any necessary modifications to suit your needs.
