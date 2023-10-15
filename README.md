@@ -1,3 +1,4 @@
+# C-Bank Pro: Banking System Simulation
 C-Bank Pro is a simple console-based banking application implemented in C. It allows users to create accounts, perform various banking operations, and check their account balance.
 
 # Prerequisites
@@ -5,7 +6,7 @@ Before you can run the C-Bank Pro application, you need to ensure that you have 
 1. **A C Compiler (e.g., GCC):** You need a C compiler to compile and run the code. You can download GCC for your platform from the official website: [GCC Downloads](https://gcc.gnu.org/install/index.html "GCC Downloads")
 2. **A Windows-based system:** This application relies on certain Windows-specific libraries (e.g., conio.h, windows.h), so its recommended to run it on a Windows system.
 
-#Getting Started
+# Getting Started
 Follow these steps to execute the C-Bank Pro application on your computer:
 1. **Clone or Download the Repository:**
 	You can either clone this GitHub repository or download it as a ZIP file. If you download it as a ZIP file, extract the contents to a directory of your choice.
@@ -27,10 +28,10 @@ This command will start the C-Bank Pro application.
 	- Follow the on-screen instructions to navigate through the application, create accounts, log in, and perform banking operations.
 
 # Application Workflow
-1. **Create an account: **You can create a new user account by selecting "Create an Account" and following the prompts to enter your information.
+1. **Create an account:** You can create a new user account by selecting "Create an Account" and following the prompts to enter your information.
 2. **Log in:** If you already have an account, select "Login," enter your phone number, and provide your password to log in.
 3. **Perform banking operations:** Once logged in, you can deposit cash, withdraw cash, check your balance, view transaction history, transfer money to other users, and access customer support.
-4. **Exit: **When you are done using the application, select "Exit" to log out and exit the application.
+4. **Exit:** When you are done using the application, select "Exit" to log out and exit the application.
 
 # Disclaimer
 This application is a simple example and is not suitable for real-world banking applications. It does not provide security measures or data validation, and it's designed for educational purposes only.
