@@ -1,6 +1,6 @@
 ![C-BANK PRO](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/3bbfe596-e741-432b-a5ac-5c547d566f08)
 
-# C-Bank Pro: Banking System Simulation
+# About C-Bank Pro
 C-Bank Pro is a simple console-based banking application implemented in C. It allows users to create accounts, perform various banking operations, and check their account balance.
 
 # Prerequisites
@@ -35,16 +35,11 @@ Follow these steps to execute the C-Bank Pro application on your computer:
 3. **Perform banking operations:** Once logged in, you can deposit cash, withdraw cash, check your balance, view transaction history, transfer money to other users, and access customer support.
 4. **Exit:** When you are done using the application, select "Exit" to log out and exit the application.
 
-# Disclaimer
-This application is a simple example and is not suitable for real-world banking applications. It does not provide security measures or data validation, and it's designed for educational purposes only.
-
-# License
-This project is licensed under the [License Name] - see the [LICENSE](LICENSE) file for details.
-
 # Authors
 - [Prabhav Pokharel](https://github.com/prabhavpokharel)
 - [Sahaj Pokharel](https://github.com/sahajpokharel)
 
+# Project Preview
 #### Screenshot
 
 ![Screenshot 1](screenshot1.png)
@@ -54,3 +49,6 @@ This project is licensed under the [License Name] - see the [LICENSE](LICENSE) f
 [Watch the Demo Video](link_to_demo_video)
 
 [![Demo Thumbnail](demo_thumbnail.png)](link_to_demo_video)
+
+# Disclaimer
+This application is a simple example and is not suitable for real-world banking applications. It does not provide security measures or data validation, and it's designed for educational purposes only.
