@@ -36,6 +36,19 @@ Follow these steps to execute the C-Bank Pro application on your computer:
 # Disclaimer
 This application is a simple example and is not suitable for real-world banking applications. It does not provide security measures or data validation, and it's designed for educational purposes only.
 
-Feel free to explore the code and make any necessary modifications to suit your needs.
+# License
+This project is licensed under the [License Name] - see the [LICENSE](LICENSE) file for details.
 
-Enjoy using C-Bank Pro!
+# Authors
+- [Prabhav Pokharel](https://github.com/prabhavpokharel)
+- [Sahaj Pokharel](https://github.com/sahajpokharel)
+
+#### Screenshot
+
+![Screenshot 1](screenshot1.png)
+
+#### Demonstration
+
+[Watch the Demo Video](link_to_demo_video)
+
+[![Demo Thumbnail](demo_thumbnail.png)](link_to_demo_video)
