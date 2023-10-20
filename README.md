@@ -35,9 +35,9 @@ Follow these steps to execute the C-Bank Pro application on your computer:
 3. **Perform banking operations:** Once logged in, you can deposit cash, withdraw cash, check your balance, view transaction history, transfer money to other users, and access customer support.
 4. **Exit:** When you are done using the application, select "Exit" to log out and exit the application.
 
-# Authors
-- [Prabhav Pokharel](https://github.com/prabhavpokharel)
+# Contributors
 - [Sahaj Pokharel](https://github.com/sahajpokharel)
+- [Prabhav Pokharel](https://github.com/prabhavpokharel) 
 
 # Project Preview
 #### Screenshot
