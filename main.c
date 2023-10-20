@@ -4,19 +4,12 @@
 #include<ctype.h>
 #include<stdlib.h>
 #include<time.h>
-#include<windows.h>
 
 #define MAX_PASSWORD_LENGTH 30
-#define MAX_TRANSACTION_LIMIT 100
-
-struct trnhistory{
-	int depo, with;
-};
 
 struct account{
 	char firstname[100], lastname[100], password[MAX_PASSWORD_LENGTH];
 	long long int phone;
-	struct trnhistory t[MAX_TRANSACTION_LIMIT];
 	double balance;
 };
 
@@ -376,7 +369,7 @@ void deposit(struct account *a)
 	printf("Enter the amount you want to deposit: ");
 	scanf("%d", &amount);
 	
-	history(a,0,1,amount);
+	history(a,0,a->phone,amount);
 	
 	a->balance += (double)amount;
 	
@@ -420,7 +413,7 @@ void withdraw(struct account *a)
 		goto amountinput;
 	}
 	
-	history(a,1,0,amount);
+	history(a,1,a->phone,amount);
 	
 	a->balance -= (double)amount;
 	
@@ -510,42 +503,19 @@ void history(struct account *a, int n, long long int phn, int amount)
 	char filename[60];
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
-	int i=0;
 	
 	if(n==0)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
-		
-		while(i<MAX_TRANSACTION_LIMIT)
-		{
-			if (a->t[i].depo==0)
-        	{
-            	a->t[i].depo = amount;
-            	fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
-            	break;
-        	}
-        	i++;
-		}
+        fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
 		fclose(fptr);
 	}
 	else if(n==1)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
-		
-		while(i<MAX_TRANSACTION_LIMIT)
-		{
-			if (a->t[i].with==0)
-        	{
-            	a->t[i].with = amount;	
-    			
-				fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
-            	
-				break;
-        	}
-        	i++;
-		}
+		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
     	fclose(fptr);
 	}
 	else if(n==2)
