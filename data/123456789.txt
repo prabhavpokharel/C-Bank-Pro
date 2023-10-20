@@ -1,4 +1,0 @@
-Deposited: 5000
-Transferred to 987456321: 2000
-Transferred to 987456321: 0
-Received from 987456321: 1000
