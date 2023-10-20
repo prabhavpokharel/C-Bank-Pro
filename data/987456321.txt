@@ -1,0 +1,4 @@
+Deposited: 2000
+Received from 123456789: 2000
+Received from 123456789: 0
+2023-10-20 12:07:53	 Transferred to 123456789: NPR 1000

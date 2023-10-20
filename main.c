@@ -3,6 +3,7 @@
 #include<string.h>
 #include<ctype.h>
 #include<stdlib.h>
+#include<time.h>
 #include<windows.h>
 
 #define MAX_PASSWORD_LENGTH 30
@@ -20,6 +21,7 @@ struct account{
 };
 
 void header();
+void home();
 void login();
 void logpassword(struct account);
 void menu(struct account);
@@ -35,14 +37,20 @@ void exitMessage();
 
 void main()
 {
+	home();
+}
+
+void home()
+{
 	char choice;
 	
+	mainmenu:	
 	header();
 	
 	printf("Homepage");
 	printf("\n\n[1] Login");
 	printf("\n[2] Create an Account");
-	printf("\n[3] Exit");	
+	printf("\n\n[0] Exit");	
 	
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
@@ -58,32 +66,33 @@ void main()
 			createacc();
 			break;
 			
-		case '3':
+		case '0':
 			exitMessage();
 			break;
 			
 		default:
-			main();
+			goto mainmenu;
 	}
 }
 
 void login()
 {
     FILE *fptr;
-    int j = 0;
+    
+	int j = 0;
     long long int phn;
     char pw[MAX_PASSWORD_LENGTH], ch, filename[60];
     struct account a;
-
+	
     header();
-
+	
     printf("Login");
     printf("\n\nEnter your mobile number: +977 ");
     fflush(stdin);
     scanf("%lld", &phn);
     printf("Enter password: ");
     fflush(stdin);
-    while (1)
+    while(1)
     {
         ch = getch();
         if (ch == 13)
@@ -114,13 +123,12 @@ void login()
     }
     pw[j] = '\0';
     
-    sprintf(filename, "%lld.bin", phn);
-
+    sprintf(filename, "data/%lld.bin", phn);
     fptr = fopen(filename, "rb");
-
+    
     int userFound = 0; 
 
-    while (fread(&a, sizeof(struct account), 1, fptr) != 0)
+    while(fread(&a, sizeof(struct account), 1, fptr) != 0)
     {
         if ((a.phone == phn) && (strcmp(a.password, pw) == 0))
         {
@@ -132,10 +140,11 @@ void login()
 
     fclose(fptr);
 
-    if (!userFound)
+    if(!userFound)
     {
         printf("\n\nUser not found.");
-        sleep(1);
+        
+		sleep(1);
         
         printf("\n[1] Retry Login");
         printf("\n[2] Homepage");
@@ -166,7 +175,8 @@ void menu(struct account a)
 	printf("\n[4] Transaction History");
 	printf("\n[5] Transfer");
 	printf("\n[6] Customer Support");
-	printf("\n[7] Exit");	
+	printf("\n[7] Log Out");
+	printf("\n\n[0] Exit");	
 	
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
@@ -196,9 +206,12 @@ void menu(struct account a)
 			
 		case '6':
 			csupport(a);
-			break;			
+			break;	
 			
 		case '7':
+			home();		
+			
+		case '0':
 			exitMessage();
 			break;
 			
@@ -232,16 +245,15 @@ void createacc()
 void logpassword(struct account a)
 {
 	FILE *fp;
+	
 	int i=0,j=0;
 	char finalpw[MAX_PASSWORD_LENGTH], ch, filename[60];
 	
-	sprintf(filename, "%lld.bin", a.phone);
-	
+	sprintf(filename, "data/%lld.bin", a.phone);
 	fp = fopen(filename,"ab");
 	
 	printf("\nEnter password: ");
-	
-    while (1) 
+    while(1) 
 	{
         ch = getch();
         if (ch == 13)
@@ -273,8 +285,7 @@ void logpassword(struct account a)
     a.password[i] = '\0';
 	
 	printf("\nConfirm password: ");
-
-	while (1) 
+	while(1) 
 	{
         ch = getch();
         if (ch == 13)
@@ -308,16 +319,20 @@ void logpassword(struct account a)
 	if(strcmp(a.password,finalpw)!=0)
 	{
 		printf("\n\nPasswords do not match. Please try again");
+		
 		fclose(fp);
+		
 		logpassword(a);
 	}
 	else
 	{
 		fwrite(&a,sizeof(a),1,fp);
 		fclose(fp);
+		
 		printf("\n\nRedirecting to login page...");
+		
 		sleep(1);
-		system("cls");
+		
 		login();
 	}
 }
@@ -331,15 +346,14 @@ void balanceInq(struct account a)
 	printf("Available Balance: %lf", a.balance);
 	
 	printf("\n\n[1] Back");
-	printf("\n[2] Exit");
+	printf("\n[0] Exit");
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	choice = getch();
-	
 	if(choice =='1')
 	{
 		menu(a);
-	}else if(choice == '2')
+	}else if(choice == '0')
 	{
 		exitMessage();
 	}else
@@ -352,26 +366,29 @@ void deposit(struct account *a)
 {
 	FILE *fptr;
 	
-	header();
-	
 	int amount;
 	char filename[60];
 	
-	sprintf(filename, "%lld.bin", a->phone);
+	sprintf(filename, "data/%lld.bin", a->phone);
+	
+	header();
 	
 	printf("Enter the amount you want to deposit: ");
 	scanf("%d", &amount);
+	
 	history(a,0,1,amount);
+	
 	a->balance += (double)amount;
 	
 	fptr = fopen(filename, "rb+");
 
     fseek(fptr, 0L, SEEK_CUR);
-
     fwrite(a, sizeof(struct account), 1, fptr);
-    fclose(fptr);
+    
+	fclose(fptr);
 	
 	printf("Your amount has been successfully deposited!");
+	
 	sleep(1);
 	
 	balanceInq(*a);
@@ -381,36 +398,41 @@ void withdraw(struct account *a)
 {
 	FILE *fptr;
 	
-	header();
+	
 	
 	int amount;
 	char filename[60];
 	
-	sprintf(filename, "%lld.bin", a->phone);
+	sprintf(filename, "data/%lld.bin", a->phone);
 	
-	amountinput:
+	amountinput:	
+	header();
+		
 	printf("Enter the amount you want to withdraw: ");
 	scanf("%d", &amount);
 	
 	if((double)amount>a->balance)
 	{
-		printf("\n\nThe entered amount exceeds your bank balance. Please try again.");
+		printf("\n\nThe entered amount exceeds your bank balance. Please try again!");
+		
 		sleep(1);
-		system("cls");
-		header();
+		
 		goto amountinput;
 	}
+	
 	history(a,1,0,amount);
+	
 	a->balance -= (double)amount;
 	
 	fptr = fopen(filename, "rb+");
 
     fseek(fptr, 0L, SEEK_CUR);
-
     fwrite(a, sizeof(struct account), 1, fptr);
-    fclose(fptr);
+    
+	fclose(fptr);
 	
 	printf("Your amount has been successfully withdrawn!");
+	
 	sleep(1);
 	
 	balanceInq(*a);
@@ -419,6 +441,7 @@ void withdraw(struct account *a)
 void transfer(struct account *a)
 {
 	FILE *fptr1, *fptr2;
+	
 	struct account b;
 	char filename[60];
 	long long int phn;
@@ -426,7 +449,7 @@ void transfer(struct account *a)
 	
 	header();
 	
-	sprintf(filename, "%lld.bin", a->phone);
+	sprintf(filename, "data/%lld.bin", a->phone);
 	
 	printf("Transfer from +977 %lld", a->phone);
 	printf("\n\nEnter Receiver's Mobile Number: +977 ");
@@ -439,8 +462,11 @@ void transfer(struct account *a)
 	if(amount>a->balance)
 	{
 		printf("\n\nThe entered amount exceeds your bank balance. Please try again.");
+		
 		sleep(1);
+		
 		header();
+		
 		goto amountinput;
 	}
 	
@@ -455,7 +481,7 @@ void transfer(struct account *a)
     
 	fclose(fptr1);
 	
-	sprintf(filename, "%lld.bin", phn);
+	sprintf(filename, "data/%lld.bin", phn);
 	fptr2 = fopen(filename, "rb+");
     
     fread(&b, sizeof(struct account), 1, fptr2);
@@ -470,6 +496,7 @@ void transfer(struct account *a)
 	fclose(fptr2);
 	
 	printf("\nYour amount has been successfully transfered!");
+	
 	sleep(1);
 	
 	balanceInq(*a);
@@ -478,19 +505,24 @@ void transfer(struct account *a)
 void history(struct account *a, int n, long long int phn, int amount)
 {
 	FILE *fptr;
+	
 	struct account b;
 	char filename[60];
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
 	int i=0;
+	
 	if(n==0)
 	{
-		sprintf(filename, "%lld.txt", a->phone);
+		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		
 		while(i<MAX_TRANSACTION_LIMIT)
 		{
 			if (a->t[i].depo==0)
         	{
             	a->t[i].depo = amount;
-            	fprintf(fptr,"Deposited: %d\n", amount);
+            	fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
             	break;
         	}
         	i++;
@@ -499,15 +531,18 @@ void history(struct account *a, int n, long long int phn, int amount)
 	}
 	else if(n==1)
 	{
-		sprintf(filename, "%lld.txt", a->phone);
+		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		
 		while(i<MAX_TRANSACTION_LIMIT)
 		{
 			if (a->t[i].with==0)
         	{
             	a->t[i].with = amount;	
-    			fprintf(fptr,"Withdrawn: %d\n", amount);
-            	break;
+    			
+				fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
+            	
+				break;
         	}
         	i++;
 		}
@@ -515,45 +550,55 @@ void history(struct account *a, int n, long long int phn, int amount)
 	}
 	else if(n==2)
 	{
-    	sprintf(filename, "%lld.txt", a->phone);
+    	sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
-    	fprintf(fptr,"Transferred to %lld: %d\n", phn, amount);
-    	fclose(fptr);
+    	
+		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Transferred to +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, amount);
+    	
+		fclose(fptr);
 	}
 	else if(n==3)
 	{
-		sprintf(filename, "%lld.txt", a->phone);
+		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
-    	fprintf(fptr,"Received from %lld: %d\n", phn, amount);
-    	fclose(fptr);
+    	
+		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Received from +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, phn, amount);
+    	
+		fclose(fptr);
 	}
 }
 
 void displayhistory(struct account *a)
 {
+	FILE *fptr;
+	
+	char c, choice, filename[60];
+	sprintf(filename, "data/%lld.txt", a->phone);
+	
 	header();
 	
-	char c,choice,filename[60];
-	FILE *fptr;
-	sprintf(filename, "%lld.txt", a->phone);
+	printf("Transactions\n\n");
+	
 	fptr = fopen(filename, "r");
+	
 	rewind(fptr);
 	while(feof(fptr)==0)
 	{
 		fscanf(fptr,"%c",&c);
 		printf("%c",c);
 	}
+	
 	fclose(fptr);
+	
 	printf("\n\n[1] Back");
-	printf("\n[2] Exit");
+	printf("\n[0] Exit");
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	choice = getch();
-	
 	if(choice =='1')
 	{
 		menu(*a);
-	}else if(choice == '2')
+	}else if(choice == '0')
 	{
 		exitMessage();
 	}else
@@ -575,15 +620,14 @@ void csupport(struct account a)
 	printf("\nEmail: suppport@example.com");
 	
 	printf("\n\n[1] Back");
-	printf("\n[2] Exit");
+	printf("\n[0] Exit");
 	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	choice = getch();
-	
 	if(choice =='1')
 	{
 		menu(a);
-	}else if(choice == '2')
+	}else if(choice == '0')
 	{
 		exitMessage();
 	}else
@@ -595,6 +639,7 @@ void csupport(struct account a)
 void header()
 {
 	system("cls");
+	
 	printf("\t  C-BANK PRO");
 	printf("\n\"Experience Banking, the PRO way\"");
 	printf("\n=================================\n\n");
@@ -605,6 +650,8 @@ void exitMessage()
 	header();
 	
 	printf("Thanks for trusting C-Bank Pro. Safe Banking, Safe Life.");
+	
 	sleep(1);
+	
 	exit(1);
 }
