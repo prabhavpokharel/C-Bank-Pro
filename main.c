@@ -25,7 +25,8 @@ void logpassword(struct account);
 void menu(struct account);
 void withdraw(struct account *);
 void createacc();
-void history(struct account *,int,int);
+void history(struct account *,int,long long int,int);
+void displayhistory(struct account *);
 void balanceInq(struct account);
 void deposit(struct account *);
 void transfer(struct account *);
@@ -186,6 +187,7 @@ void menu(struct account a)
 			break;
 			
 		case '4':
+			displayhistory(&a);
 			break;
 			
 		case '5':
@@ -359,7 +361,7 @@ void deposit(struct account *a)
 	
 	printf("Enter the amount you want to deposit: ");
 	scanf("%d", &amount);
-	history(a,0,amount);
+	history(a,0,1,amount);
 	a->balance += (double)amount;
 	
 	fptr = fopen(filename, "rb+");
@@ -398,7 +400,7 @@ void withdraw(struct account *a)
 		header();
 		goto amountinput;
 	}
-	history(a,1,amount);
+	history(a,1,0,amount);
 	a->balance -= (double)amount;
 	
 	fptr = fopen(filename, "rb+");
@@ -412,35 +414,6 @@ void withdraw(struct account *a)
 	sleep(1);
 	
 	balanceInq(*a);
-}
-
-void history(struct account *a, int n, int amount)
-{
-	int i=0;
-	if(n==0)
-	{
-		while(i<MAX_TRANSACTION_LIMIT)
-		{
-			if (a->t[i].depo==0)
-        	{
-            	a->t[i].depo = amount;
-            	break;
-        	}
-        	i++;
-		}
-	}
-	else if(n==1)
-	{
-		while(i<MAX_TRANSACTION_LIMIT)
-		{
-			if (a->t[i].with==0)
-        	{
-            	a->t[i].with = amount;
-            	break;
-        	}
-        	i++;
-		}
-	}
 }
 
 void transfer(struct account *a)
@@ -478,14 +451,19 @@ void transfer(struct account *a)
 	fseek(fptr1, 0L, SEEK_CUR);
     fwrite(a, sizeof(struct account), 1, fptr1);
     
+    history(a,2,phn,amount);
+    
 	fclose(fptr1);
 	
 	sprintf(filename, "%lld.bin", phn);
 	fptr2 = fopen(filename, "rb+");
     
     fread(&b, sizeof(struct account), 1, fptr2);
-    b.balance += amount;
     
+	b.balance += amount;
+    
+    history(&b,3,a->phone,amount);
+	
 	fseek(fptr2, 0L, SEEK_SET);
     fwrite(&b, sizeof(struct account), 1, fptr2);
     
@@ -495,6 +473,93 @@ void transfer(struct account *a)
 	sleep(1);
 	
 	balanceInq(*a);
+}
+
+void history(struct account *a, int n, long long int phn, int amount)
+{
+	FILE *fptr;
+	struct account b;
+	char filename[60];
+	int i=0;
+	if(n==0)
+	{
+		sprintf(filename, "%lld.txt", a->phone);
+		fptr = fopen(filename, "a");
+		while(i<MAX_TRANSACTION_LIMIT)
+		{
+			if (a->t[i].depo==0)
+        	{
+            	a->t[i].depo = amount;
+            	fprintf(fptr,"Deposited: %d\n", amount);
+            	break;
+        	}
+        	i++;
+		}
+		fclose(fptr);
+	}
+	else if(n==1)
+	{
+		sprintf(filename, "%lld.txt", a->phone);
+		fptr = fopen(filename, "a");
+		while(i<MAX_TRANSACTION_LIMIT)
+		{
+			if (a->t[i].with==0)
+        	{
+            	a->t[i].with = amount;	
+    			fprintf(fptr,"Withdrawn: %d\n", amount);
+            	break;
+        	}
+        	i++;
+		}
+    	fclose(fptr);
+	}
+	else if(n==2)
+	{
+    	sprintf(filename, "%lld.txt", a->phone);
+		fptr = fopen(filename, "a");
+    	fprintf(fptr,"Transferred to %lld: %d\n", phn, amount);
+    	fclose(fptr);
+	}
+	else if(n==3)
+	{
+		sprintf(filename, "%lld.txt", a->phone);
+		fptr = fopen(filename, "a");
+    	fprintf(fptr,"Received from %lld: %d\n", phn, amount);
+    	fclose(fptr);
+	}
+}
+
+void displayhistory(struct account *a)
+{
+	header();
+	
+	char c,choice,filename[60];
+	FILE *fptr;
+	sprintf(filename, "%lld.txt", a->phone);
+	fptr = fopen(filename, "r");
+	rewind(fptr);
+	while(feof(fptr)==0)
+	{
+		fscanf(fptr,"%c",&c);
+		printf("%c",c);
+	}
+	fclose(fptr);
+	printf("\n\n[1] Back");
+	printf("\n[2] Exit");
+	printf("\n\nEnter your choice: ");
+	fflush(stdin);
+	choice = getch();
+	
+	if(choice =='1')
+	{
+		menu(*a);
+	}else if(choice == '2')
+	{
+		exitMessage();
+	}else
+	{
+		displayhistory(a);
+	}
 }
 
 void csupport(struct account a)
