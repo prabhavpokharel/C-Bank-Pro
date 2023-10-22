@@ -4,19 +4,12 @@
 #include<ctype.h>
 #include<stdlib.h>
 #include<time.h>
-#include<windows.h>
 
 #define MAX_PASSWORD_LENGTH 30
-#define MAX_TRANSACTION_LIMIT 100
-
-struct trnhistory{
-	int depo, with;
-};
 
 struct account{
 	char firstname[100], lastname[100], password[MAX_PASSWORD_LENGTH];
 	long long int phone;
-	struct trnhistory t[MAX_TRANSACTION_LIMIT];
 	double balance;
 };
 
@@ -376,7 +369,7 @@ void deposit(struct account *a)
 	printf("Enter the amount you want to deposit: ");
 	scanf("%d", &amount);
 	
-	history(a,0,1,amount);
+	history(a,0,a->phone,amount);
 	
 	a->balance += (double)amount;
 	
@@ -420,7 +413,7 @@ void withdraw(struct account *a)
 		goto amountinput;
 	}
 	
-	history(a,1,0,amount);
+	history(a,1,a->phone,amount);
 	
 	a->balance -= (double)amount;
 	
@@ -502,7 +495,7 @@ void transfer(struct account *a)
 	balanceInq(*a);
 }
 
-void history(struct account *a, int n, long long int phn, int amount)
+void history(struct account *a, int trn_type, long long int phn, int amount)
 {
 	FILE *fptr;
 	
@@ -510,45 +503,26 @@ void history(struct account *a, int n, long long int phn, int amount)
 	char filename[60];
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
-	int i=0;
 	
-	if(n==0)
+	if(trn_type==0)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
 		
-		while(i<MAX_TRANSACTION_LIMIT)
-		{
-			if (a->t[i].depo==0)
-        	{
-            	a->t[i].depo = amount;
-            	fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
-            	break;
-        	}
-        	i++;
-		}
+        fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
+		
 		fclose(fptr);
 	}
-	else if(n==1)
+	else if(trn_type==1)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
 		
-		while(i<MAX_TRANSACTION_LIMIT)
-		{
-			if (a->t[i].with==0)
-        	{
-            	a->t[i].with = amount;	
-    			
-				fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
-            	
-				break;
-        	}
-        	i++;
-		}
-    	fclose(fptr);
+		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
+    	
+		fclose(fptr);
 	}
-	else if(n==2)
+	else if(trn_type==2)
 	{
     	sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
@@ -557,12 +531,12 @@ void history(struct account *a, int n, long long int phn, int amount)
     	
 		fclose(fptr);
 	}
-	else if(n==3)
+	else if(trn_type==3)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
     	
-		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Received from +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, phn, amount);
+		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Received from +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, amount);
     	
 		fclose(fptr);
 	}
