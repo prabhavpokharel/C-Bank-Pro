@@ -495,7 +495,7 @@ void transfer(struct account *a)
 	balanceInq(*a);
 }
 
-void history(struct account *a, int n, long long int phn, int amount)
+void history(struct account *a, int trn_type, long long int phn, int amount)
 {
 	FILE *fptr;
 	
@@ -504,21 +504,25 @@ void history(struct account *a, int n, long long int phn, int amount)
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 	
-	if(n==0)
+	if(trn_type==0)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		
         fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
+		
 		fclose(fptr);
 	}
-	else if(n==1)
+	else if(trn_type==1)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		
 		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
-    	fclose(fptr);
+    	
+		fclose(fptr);
 	}
-	else if(n==2)
+	else if(trn_type==2)
 	{
     	sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
@@ -527,12 +531,12 @@ void history(struct account *a, int n, long long int phn, int amount)
     	
 		fclose(fptr);
 	}
-	else if(n==3)
+	else if(trn_type==3)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
     	
-		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Received from +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, phn, amount);
+		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Received from +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, amount);
     	
 		fclose(fptr);
 	}
