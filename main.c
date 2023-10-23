@@ -43,9 +43,8 @@ void home()
 	printf("Homepage");
 	printf("\n\n[1] Login");
 	printf("\n[2] Create an Account");
-	printf("\n\n[0] Exit");	
+	printf("\n\n[0] Exit\n");	
 	
-	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	choice = getch();
 	
@@ -126,7 +125,7 @@ void login()
         
         printf("\n\n[1] Retry Login");
         printf("\n[2] Homepage");
-        printf("\n\nEnter your choice: ");
+        
         fflush(stdin);
         char choice = getch();
         if (choice == '1')
@@ -165,9 +164,8 @@ void menu(struct account a)
 	printf("\n[5] Transfer");
 	printf("\n[6] Customer Support");
 	printf("\n[7] Log Out");
-	printf("\n\n[0] Exit");	
+	printf("\n\n[0] Exit\n");	
 	
-	printf("\n\nEnter your choice: ");
 	fflush(stdin);
 	choice = getch();
 	
@@ -343,8 +341,8 @@ void balanceInq(struct account a)
 	printf("Available Balance: %lf", a.balance);
 	
 	printf("\n\n[1] Back");
-	printf("\n[0] Exit");
-	printf("\n\nEnter your choice: ");
+	printf("\n[0] Exit\n");
+	
 	fflush(stdin);
 	choice = getch();
 	if(choice =='1')
@@ -383,8 +381,8 @@ void deposit(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Amount");
-        printf("\n[2] Back");
-        printf("\n\nEnter your choice: ");
+        printf("\n[2] Back\n");
+        
         fflush(stdin);
         char choice = getch();
         if (choice == '1')
@@ -454,8 +452,8 @@ void withdraw(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Amount");
-        printf("\n[2] Back");
-        printf("\n\nEnter your choice: ");
+        printf("\n[2] Back\n");
+        
         fflush(stdin);
         char choice = getch();
         if (choice == '1')
@@ -516,13 +514,13 @@ void transfer(struct account *a)
 	fptr2 = fopen(filename, "rb+");
 	if(fptr2==NULL)
 	{
-		printf("\nThe user does not exists. Please try again!");
+		printf("\nThe user does not exist. Please try again!");
 		
 		sleep(1);
         
         printf("\n\n[1] Re-enter Receiver's Number");
-        printf("\n[2] Back");
-        printf("\n\nEnter your choice: ");
+        printf("\n[2] Back\n");
+        
         fflush(stdin);
         char choice = getch();
         if (choice == '1')
@@ -555,8 +553,8 @@ void transfer(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Amount");
-        printf("\n[2] Back");
-        printf("\n\nEnter your choice: ");
+        printf("\n[2] Back\n");
+        
         fflush(stdin);
         char choice = getch();
         if (choice == '1')
@@ -718,8 +716,8 @@ void displayhistory(struct account *a)
 	fclose(fptr);
 	
 	printf("\n\n[1] Back");
-	printf("\n[0] Exit");
-	printf("\n\nEnter your choice: ");
+	printf("\n[0] Exit\n");
+	
 	fflush(stdin);
 	choice = getch();
 	if(choice =='1')
@@ -747,8 +745,8 @@ void csupport(struct account a)
 	printf("\nEmail: suppport@example.com");
 	
 	printf("\n\n[1] Back");
-	printf("\n[0] Exit");
-	printf("\n\nEnter your choice: ");
+	printf("\n[0] Exit\n");
+	
 	fflush(stdin);
 	choice = getch();
 	if(choice =='1')
