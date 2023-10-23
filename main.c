@@ -118,28 +118,13 @@ void login()
     
     sprintf(filename, "data/%lld.bin", phn);
     fptr = fopen(filename, "rb");
-    
-    int userFound = 0; 
-
-    while(fread(&a, sizeof(struct account), 1, fptr) != 0)
-    {
-        if ((a.phone == phn) && (strcmp(a.password, pw) == 0))
-        {
-            menu(a);
-            userFound = 1; 
-            break; 
-        }
-    }
-
-    fclose(fptr);
-
-    if(!userFound)
-    {
-        printf("\n\nUser not found.");
+    if(fptr==NULL)
+	{
+		printf("\n\nUser not found.");
         
 		sleep(1);
         
-        printf("\n[1] Retry Login");
+        printf("\n\n[1] Retry Login");
         printf("\n[2] Homepage");
         printf("\n\nEnter your choice: ");
         fflush(stdin);
@@ -150,9 +135,20 @@ void login()
         }
         else if (choice == '2')
         {
-            main(); 
+            home(); 
+        }
+	}
+
+    while(fread(&a, sizeof(struct account), 1, fptr) != 0)
+    {
+        if ((a.phone == phn) && (strcmp(a.password, pw) == 0))
+        {
+            menu(a);
+            break; 
         }
     }
+
+    fclose(fptr);
 }
 
 void menu(struct account a)
@@ -244,6 +240,14 @@ void logpassword(struct account a)
 	
 	sprintf(filename, "data/%lld.bin", a.phone);
 	fp = fopen(filename,"ab");
+	if(fp==NULL)
+	{
+		printf("\nUser not found.");
+		
+		sleep(1);
+		
+		exit(1);
+	}
 	
 	printf("\nEnter password: ");
     while(1) 
@@ -366,14 +370,45 @@ void deposit(struct account *a)
 	
 	header();
 	
-	printf("Enter the amount you want to deposit: ");
+	printf("Deposit");
+	
+	checkpoint:
+	printf("\n\nEnter the amount you want to deposit: ");
 	scanf("%d", &amount);
+	
+	if(amount<=0)
+	{
+		printf("\nYour amount must be greater than 0. Please try again!");
+		
+		sleep(1);
+        
+        printf("\n\n[1] Re-enter Amount");
+        printf("\n[2] Back");
+        printf("\n\nEnter your choice: ");
+        fflush(stdin);
+        char choice = getch();
+        if (choice == '1')
+        {
+            goto checkpoint;
+        }
+        else if (choice == '2')
+        {
+            menu(*a); 
+        }
+	}
 	
 	history(a,0,a->phone,amount);
 	
 	a->balance += (double)amount;
 	
 	fptr = fopen(filename, "rb+");
+	if(fptr == NULL)
+	{
+		printf("\nError: File not Found");
+		
+		sleep(1);
+		exit(1);
+	}
 
     fseek(fptr, 0L, SEEK_CUR);
     fwrite(a, sizeof(struct account), 1, fptr);
@@ -391,8 +426,6 @@ void withdraw(struct account *a)
 {
 	FILE *fptr;
 	
-	
-	
 	int amount;
 	char filename[60];
 	
@@ -401,7 +434,9 @@ void withdraw(struct account *a)
 	amountinput:	
 	header();
 		
-	printf("Enter the amount you want to withdraw: ");
+	printf("Withdraw");
+		
+	printf("\n\nEnter the amount you want to withdraw: ");
 	scanf("%d", &amount);
 	
 	if((double)amount>a->balance)
@@ -412,23 +447,52 @@ void withdraw(struct account *a)
 		
 		goto amountinput;
 	}
+	else if(amount<=0)
+	{
+		printf("\nYour amount must be greater than 0. Please try again!");
+		
+		sleep(1);
+        
+        printf("\n\n[1] Re-enter Amount");
+        printf("\n[2] Back");
+        printf("\n\nEnter your choice: ");
+        fflush(stdin);
+        char choice = getch();
+        if (choice == '1')
+        {
+            goto amountinput;
+        }
+        else if (choice == '2')
+        {
+            menu(*a); 
+        }
+	}else
+	{
+		history(a,1,a->phone,amount);
 	
-	history(a,1,a->phone,amount);
+		a->balance -= (double)amount;
+		
+		fptr = fopen(filename, "rb+");
+		if(fptr==NULL)
+		{
+			printf("\nError: File not Found");
+			
+			sleep(1);
+			
+			exit(1);
+		}
 	
-	a->balance -= (double)amount;
-	
-	fptr = fopen(filename, "rb+");
-
-    fseek(fptr, 0L, SEEK_CUR);
-    fwrite(a, sizeof(struct account), 1, fptr);
-    
-	fclose(fptr);
-	
-	printf("Your amount has been successfully withdrawn!");
-	
-	sleep(1);
-	
-	balanceInq(*a);
+	    fseek(fptr, 0L, SEEK_CUR);
+	    fwrite(a, sizeof(struct account), 1, fptr);
+	    
+		fclose(fptr);
+		
+		printf("Your amount has been successfully withdrawn!");
+		
+		sleep(1);
+		
+		balanceInq(*a);	
+	}
 }
 
 void transfer(struct account *a)
@@ -448,51 +512,99 @@ void transfer(struct account *a)
 	printf("\n\nEnter Receiver's Mobile Number: +977 ");
 	scanf("%lld", &phn);
 	
+	sprintf(filename, "data/%lld.bin", phn);
+	fptr2 = fopen(filename, "rb+");
+	if(fptr2==NULL)
+	{
+		printf("\nThe user does not exists. Please try again!");
+		
+		sleep(1);
+        
+        printf("\n\n[1] Re-enter Receiver's Number");
+        printf("\n[2] Back");
+        printf("\n\nEnter your choice: ");
+        fflush(stdin);
+        char choice = getch();
+        if (choice == '1')
+        {
+            transfer(a); 
+        }
+        else if (choice == '2')
+        {
+            menu(*a); 
+        }		
+	}
+	
 	amountinput:
 	printf("Enter transfer amount: ");
 	scanf("%lf", &amount);
 	
 	if(amount>a->balance)
 	{
-		printf("\n\nThe entered amount exceeds your bank balance. Please try again.");
+		printf("\n\nThe entered amount exceeds your bank balance. Please try again!");
 		
 		sleep(1);
 		
 		header();
 		
 		goto amountinput;
+	}else if(amount<=0)
+	{
+		printf("\nYour amount must be greater than 0. Please try again!");
+		
+		sleep(1);
+        
+        printf("\n\n[1] Re-enter Amount");
+        printf("\n[2] Back");
+        printf("\n\nEnter your choice: ");
+        fflush(stdin);
+        char choice = getch();
+        if (choice == '1')
+        {
+            goto amountinput;
+        }
+        else if (choice == '2')
+        {
+            menu(*a); 
+        }
+	}else
+	{
+		a->balance -= amount;
+	
+		fptr1 = fopen(filename, "rb+");
+		if(fptr1==NULL)
+		{
+			printf("\nError: File not Found");
+			
+			sleep(1);
+			
+			exit(1);
+		}
+	    
+		fseek(fptr1, 0L, SEEK_CUR);
+	    fwrite(a, sizeof(struct account), 1, fptr1);
+	    
+	    history(a,2,phn,amount);
+	    
+		fclose(fptr1);
+	    
+	    fread(&b, sizeof(struct account), 1, fptr2);
+	    
+		b.balance += amount;
+	    
+	    history(&b,3,a->phone,amount);
+		
+		fseek(fptr2, 0L, SEEK_SET);
+	    fwrite(&b, sizeof(struct account), 1, fptr2);
+	    
+		fclose(fptr2);
+		
+		printf("\nYour amount has been successfully transferred!");
+		
+		sleep(1);
+		
+		balanceInq(*a);	
 	}
-	
-	a->balance -= amount;
-	
-	fptr1 = fopen(filename, "rb+");
-    
-	fseek(fptr1, 0L, SEEK_CUR);
-    fwrite(a, sizeof(struct account), 1, fptr1);
-    
-    history(a,2,phn,amount);
-    
-	fclose(fptr1);
-	
-	sprintf(filename, "data/%lld.bin", phn);
-	fptr2 = fopen(filename, "rb+");
-    
-    fread(&b, sizeof(struct account), 1, fptr2);
-    
-	b.balance += amount;
-    
-    history(&b,3,a->phone,amount);
-	
-	fseek(fptr2, 0L, SEEK_SET);
-    fwrite(&b, sizeof(struct account), 1, fptr2);
-    
-	fclose(fptr2);
-	
-	printf("\nYour amount has been successfully transfered!");
-	
-	sleep(1);
-	
-	balanceInq(*a);
 }
 
 void history(struct account *a, int trn_type, long long int phn, int amount)
@@ -508,7 +620,15 @@ void history(struct account *a, int trn_type, long long int phn, int amount)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
-		
+		if(fptr==NULL)
+		{
+			printf("\nError: File not Found");
+			
+			sleep(1);
+			
+			exit(1);
+		}
+				
         fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Deposited: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
 		
 		fclose(fptr);
@@ -517,6 +637,14 @@ void history(struct account *a, int trn_type, long long int phn, int amount)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		if(fptr==NULL)
+		{
+			printf("\nError: File not Found");
+			
+			sleep(1);
+			
+			exit(1);
+		}
 		
 		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Withdrawn: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, amount);
     	
@@ -526,6 +654,14 @@ void history(struct account *a, int trn_type, long long int phn, int amount)
 	{
     	sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		if(fptr==NULL)
+		{
+			printf("\nError: File not Found");
+			
+			sleep(1);
+			
+			exit(1);
+		}
     	
 		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Transferred to +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, amount);
     	
@@ -535,6 +671,14 @@ void history(struct account *a, int trn_type, long long int phn, int amount)
 	{
 		sprintf(filename, "data/%lld.txt", a->phone);
 		fptr = fopen(filename, "a");
+		if(fptr==NULL)
+		{
+			printf("\nError: File not Found");
+			
+			sleep(1);
+			
+			exit(1);
+		}
     	
 		fprintf(fptr,"%d-%02d-%02d %02d:%02d:%02d\t Received from +977 %lld: NPR %d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, phn, amount);
     	
@@ -547,6 +691,7 @@ void displayhistory(struct account *a)
 	FILE *fptr;
 	
 	char c, choice, filename[60];
+	
 	sprintf(filename, "data/%lld.txt", a->phone);
 	
 	header();
@@ -554,12 +699,20 @@ void displayhistory(struct account *a)
 	printf("Transactions\n\n");
 	
 	fptr = fopen(filename, "r");
+	if(fptr==NULL)
+	{
+		printf("\nError: File not Found");
+		
+		sleep(1);
+		
+		exit(1);
+	}
 	
 	rewind(fptr);
-	while(feof(fptr)==0)
+	while(feof(fptr) == 0)
 	{
-		fscanf(fptr,"%c",&c);
-		printf("%c",c);
+		fscanf(fptr, "%c", &c);
+		printf("%c", c);
 	}
 	
 	fclose(fptr);
@@ -623,9 +776,10 @@ void exitMessage()
 {
 	header();
 	
-	printf("Thanks for trusting C-Bank Pro. Safe Banking, Safe Life.");
+	printf("Thank you for choosing C-Bank Pro - Your Trusted Banking Partner");
+	printf("\n\nHave a great day!");
 	
-	sleep(1);
+	sleep(2);
 	
-	exit(1);
+	exit(0);
 }
