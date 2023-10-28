@@ -43,7 +43,7 @@ void home()
 	printf("Homepage");
 	printf("\n\n[1] Login");
 	printf("\n[2] Create an Account");
-	printf("\n\n[0] Exit\n");	
+	printf("\n\n[0] Exit\n\n");	
 	
 	fflush(stdin);
 	choice = getch();
@@ -124,7 +124,7 @@ void login()
 		sleep(1);
         
         printf("\n\n[1] Retry Login");
-        printf("\n[2] Homepage");
+        printf("\n[2] Homepage\n\n");
         
         fflush(stdin);
         char choice = getch();
@@ -164,7 +164,7 @@ void menu(struct account a)
 	printf("\n[5] Transfer");
 	printf("\n[6] Customer Support");
 	printf("\n[7] Log Out");
-	printf("\n\n[0] Exit\n");	
+	printf("\n\n[0] Exit\n\n");	
 	
 	fflush(stdin);
 	choice = getch();
@@ -212,6 +212,8 @@ void createacc()
 	struct account a;
 	
 	header();
+	
+	printf("Creating a new account\n\n");
 	
 	printf("Enter first name: ");
 	fflush(stdin);
@@ -341,7 +343,7 @@ void balanceInq(struct account a)
 	printf("Available Balance: %lf", a.balance);
 	
 	printf("\n\n[1] Back");
-	printf("\n[0] Exit\n");
+	printf("\n[0] Exit\n\n");
 	
 	fflush(stdin);
 	choice = getch();
@@ -381,7 +383,7 @@ void deposit(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Amount");
-        printf("\n[2] Back\n");
+        printf("\n[2] Back\n\n");
         
         fflush(stdin);
         char choice = getch();
@@ -452,7 +454,7 @@ void withdraw(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Amount");
-        printf("\n[2] Back\n");
+        printf("\n[2] Back\n\n");
         
         fflush(stdin);
         char choice = getch();
@@ -519,7 +521,7 @@ void transfer(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Receiver's Number");
-        printf("\n[2] Back\n");
+        printf("\n[2] Back\n\n");
         
         fflush(stdin);
         char choice = getch();
@@ -553,7 +555,7 @@ void transfer(struct account *a)
 		sleep(1);
         
         printf("\n\n[1] Re-enter Amount");
-        printf("\n[2] Back\n");
+        printf("\n[2] Back\n\n");
         
         fflush(stdin);
         char choice = getch();
@@ -716,7 +718,7 @@ void displayhistory(struct account *a)
 	fclose(fptr);
 	
 	printf("\n\n[1] Back");
-	printf("\n[0] Exit\n");
+	printf("\n[0] Exit\n\n");
 	
 	fflush(stdin);
 	choice = getch();
@@ -745,7 +747,7 @@ void csupport(struct account a)
 	printf("\nEmail: suppport@example.com");
 	
 	printf("\n\n[1] Back");
-	printf("\n[0] Exit\n");
+	printf("\n[0] Exit\n\n");
 	
 	fflush(stdin);
 	choice = getch();
