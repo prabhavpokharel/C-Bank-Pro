@@ -40,12 +40,14 @@ Follow these steps to execute the C-Bank Pro application on your computer:
 - [Prabhav Pokharel](https://github.com/prabhavpokharel) 
 
 # Project Preview
-#### Screenshot
-
-![Screenshot 1](screenshot1.png)
+#### Screenshots
+![Screenshot 1](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/6b8b0c7e-02b0-40d6-a238-d1dc673bf8dd)
+![Screenshot 2](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/68a9ed06-f0e6-4695-af60-accb50c09445)
+![Screenshot 3](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/e14b09ce-d13d-420c-954d-83d2af4dcd97)
+![Screenshot 4](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/823bff87-02db-40ca-babf-6613f7c773cf)
+![Screenshot 5](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/dd7bd75a-7972-42b2-ba69-d57eea527e85)
 
 #### Demonstration
-
 [Watch the Demo Video](link_to_demo_video)
 
 [![Demo Thumbnail](demo_thumbnail.png)](link_to_demo_video)
