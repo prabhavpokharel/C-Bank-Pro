@@ -36,21 +36,20 @@ Follow these steps to execute the C-Bank Pro application on your computer:
 4. **Exit:** When you are done using the application, select "Exit" to log out and exit the application.
 
 # Contributors
-- [Sahaj Pokharel](https://github.com/sahajpokharel)
-- [Prabhav Pokharel](https://github.com/prabhavpokharel) 
+- [Prabhav Pokharel](https://github.com/prabhavpokharel)
+- [Sahaj Pokharel](https://github.com/sahajpokharel) 
 
 # Project Preview
 #### Screenshots
-![Screenshot 1](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/6b8b0c7e-02b0-40d6-a238-d1dc673bf8dd)
-![Screenshot 2](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/68a9ed06-f0e6-4695-af60-accb50c09445)
-![Screenshot 3](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/e14b09ce-d13d-420c-954d-83d2af4dcd97)
-![Screenshot 4](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/823bff87-02db-40ca-babf-6613f7c773cf)
-![Screenshot 5](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/dd7bd75a-7972-42b2-ba69-d57eea527e85)
+<img src="preview/1.jpg" alt="Screenshot1" width=480>
+<img src="preview/2.jpg" alt="Screenshot2" width=480>
+<img src="preview/3.jpg" alt="Screenshot3" width=480>
+<img src="preview/4.jpg" alt="Screenshot4" width=480>
+<img src="preview/5.jpg" alt="Screenshot5" width=480>
+<img src="preview/6.jpg" alt="Screenshot6" width=480>
 
 #### Demonstration
-[Watch the Demo Video](link_to_demo_video)
-
-[![Demo Thumbnail](demo_thumbnail.png)](link_to_demo_video)
+[Watch the Demo Video](https://youtu.be/xSsRk-wUCtM)
 
 # Disclaimer
 This application is a simple example and is not suitable for real-world banking applications. It does not provide security measures or data validation, and it's designed for educational purposes only.
