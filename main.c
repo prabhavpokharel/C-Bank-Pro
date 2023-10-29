@@ -506,8 +506,6 @@ void transfer(struct account *a)
 	
 	header();
 	
-	sprintf(filename, "data/%lld.bin", a->phone);
-	
 	printf("Transfer from +977 %lld", a->phone);
 	printf("\n\nEnter Receiver's Mobile Number: +977 ");
 	scanf("%lld", &phn);
@@ -571,6 +569,7 @@ void transfer(struct account *a)
 	{
 		a->balance -= amount;
 	
+		sprintf(filename, "data/%lld.bin", a->phone);
 		fptr1 = fopen(filename, "rb+");
 		if(fptr1==NULL)
 		{
