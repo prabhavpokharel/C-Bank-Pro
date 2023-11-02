@@ -1,11 +1,11 @@
-![C-BANK PRO](https://github.com/prabhavpokharel/C-Bank-Pro/assets/53425126/3bbfe596-e741-432b-a5ac-5c547d566f08)
+![C-BANK PRO](preview/cover.png)
 
 # About C-Bank Pro
 C-Bank Pro is a simple console-based banking application implemented in C. It allows users to create accounts, perform various banking operations, and check their balances.
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
-- **C Compiler**: You need a C compiler to compile and run the C source code. For example, you can use `GCC` on Unix-based systems or `MinGW` on Windows.
+- **C Compiler**: You need a C compiler to compile and run the C source code. For example, you can use `MinGW` on Windows.
 
 ## Getting Started
 1. **Clone the Repository:** Clone this GitHub repository to your local system:
@@ -13,13 +13,8 @@ Before you begin, ensure you have met the following requirements:
     ```shell
     git clone https://github.com/prabhavpokharel/C-Bank-Pro.git
     ```
-2. **Compile the Code:** Navigate to the project directory and compile the C source code based on your platform.
-   - On Unix-based systems (using GCC):
-
-     ```shell
-     gcc main.c -o c-bank-pro
-     ```
-   - On Windows (using MinGW):
+2. **Compile the Code:** Navigate to the project directory and compile the C source code.
+     - On Windows (using MinGW):
 
      ```shell
      gcc main.c -o c-bank-pro
@@ -28,11 +23,6 @@ Before you begin, ensure you have met the following requirements:
    This will create an executable file named `c-bank-pro`.
 
 3. **Run the Program:** Start C-BANK PRO by executing the compiled program.
-   - On Unix-based systems:
-
-     ```shell
-     ./c-bank-pro
-     ```
    - On Windows:
 
      ```shell
