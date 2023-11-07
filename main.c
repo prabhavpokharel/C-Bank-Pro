@@ -617,8 +617,8 @@ void history(struct account *a, int trn_type, long long int phn, int amount)
 	
 	struct account b;
 	char filename[60];
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
+	time_t t = time(NULL);		// Get the current time in seconds since the epoch (Unix timestamp)
+	struct tm tm = *localtime(&t);		// Convert the timestamp to a local time structure
 	
 	if(trn_type==0)
 	{
