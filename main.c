@@ -13,20 +13,22 @@ struct account{
 	double balance;
 };
 
-void header();
-void home();
-void login();
-void logpassword(struct account);
-void menu(struct account);
-void withdraw(struct account *);
-void createacc();
-void history(struct account *,int,long long int,int);
-void displayhistory(struct account *);
-void balanceInq(struct account);
-void deposit(struct account *);
-void transfer(struct account *);
-void csupport(struct account);
-void exitMessage();
+//Function declarations:-
+
+void header();											//Function which displays the header shown on top of every page
+void home();											//Homepage function
+void login();											//Login function
+void logpassword(struct account);						//Password input function for a given user
+void menu(struct account);								//Function displaying menu after the user is logged in
+void withdraw(struct account *);						//Money withdraw function
+void createacc();										//Account creation function
+void history(struct account *,int,long long int,int);	//Function to store the transaction history for a given user
+void displayhistory(struct account *);					//Function to display the transaction history for a given user
+void balanceInq(struct account);						//Balance enquiry function
+void deposit(struct account *);							//Money deposit function
+void transfer(struct account *);						//Amount transfer function
+void csupport(struct account);							//Function that displays customer support numbers and emails
+void exitMessage();										//Function to display exit message
 
 void main()		// Starting point of the main program
 {
@@ -86,34 +88,34 @@ void login()
     fflush(stdin);
     while(1)
     {
-        ch = getch();
-        if (ch == 13)
+        ch = getch();	//A character is input by the user.
+        if (ch == 13)	//A Carriage return or Newline Character has an ASCII value of 13
         {
-            break;
+            break;	//Loop is terminated if the user presses return.
         }
-        else if (ch == 8 || ch == 127)
+        else if (ch == 8 || ch == 127)	//Backspace has an ASCII value of 8, while 127 represents the Delete character.
         {
             if (j > 0)
             {
                 j--;
-                printf("\b \b");
+                printf("\b \b");	//The previously entered charcter is erased.
             }
         }
-        else if (!isspace(ch))
+        else if (!isspace(ch))	//Checks whether the entered charcter is a whitespace character or not
         {
             if (j < MAX_PASSWORD_LENGTH - 1)
             {
-                putchar('*');
-                pw[j] = ch;
+                putchar('*');	//Displays an '*' on the screen instead of the entered charcter
+                pw[j] = ch;		//The value of ch is stored in the jth index of array pw
                 j++;
             }
             else
             {
-                
+                //Prevents the user from entering any more characters.
             }
         }
     }
-    pw[j] = '\0';
+    pw[j] = '\0';	//A null character is stored at the end of the array
     
     sprintf(filename, "data/%lld.bin", phn);
     fptr = fopen(filename, "rb");
@@ -140,9 +142,9 @@ void login()
 
     while(fread(&a, sizeof(struct account), 1, fptr) != 0)
     {
-        if ((a.phone == phn) && (strcmp(a.password, pw) == 0))
+        if ((a.phone == phn) && (strcmp(a.password, pw) == 0))	//Checks whether the entered password matches the one stored previously on the structure 'a'.
         {
-            menu(a);
+            menu(a);	//User is redirected to the menu page.
             break; 
         }
     }
@@ -242,11 +244,11 @@ void logpassword(struct account a)
 	fp = fopen(filename,"ab");
 	if(fp==NULL)
 	{
-		printf("\nUser not found.");
+		printf("\nError. Please try again.");
 		
 		sleep(1);
 		
-		exit(1);
+		createacc();
 	}
 	
 	printf("\nEnter password: ");
@@ -313,7 +315,7 @@ void logpassword(struct account a)
     }
     finalpw[j] = '\0';
 	
-	if(strcmp(a.password,finalpw)!=0)
+	if(strcmp(a.password,finalpw)!=0)	//Checks whether or not both passwords match
 	{
 		printf("\n\nPasswords do not match. Please try again");
 		
@@ -323,7 +325,7 @@ void logpassword(struct account a)
 	}
 	else
 	{
-		fwrite(&a,sizeof(a),1,fp);
+		fwrite(&a,sizeof(a),1,fp);	//Password is stored within the respective structure
 		fclose(fp);
 		
 		printf("\n\nRedirecting to login page...");
@@ -359,20 +361,20 @@ void balanceInq(struct account a)	// Function definition of Balance Inquiry with
 	}
 }
 
-void deposit(struct account *a)
+void deposit(struct account *a)	//Function definition for deposit()
 {
-	FILE *fptr;
+	FILE *fptr;	//File pointer declaration
 	
 	int amount;
 	char filename[60];
 	
-	sprintf(filename, "data/%lld.bin", a->phone);
+	sprintf(filename, "data/%lld.bin", a->phone);	//A .bin file is created inside the folder 'data' with the value of a->phone as its filename. The full name is then stored in the character array 'filename[]'
 	
 	header();
 	
 	printf("Deposit");
 	
-	checkpoint:
+	checkpoint:		//'checkpoint' label declared
 	printf("\n\nEnter the amount you want to deposit: ");
 	scanf("%d", &amount);
 	
@@ -380,49 +382,49 @@ void deposit(struct account *a)
 	{
 		printf("\nYour amount must be greater than 0. Please try again!");
 		
-		sleep(1);
+		sleep(1);	//Delays the flow of the program by 1 second
         
         printf("\n\n[1] Re-enter Amount");
         printf("\n[2] Back\n\n");
         
-        fflush(stdin);
+        fflush(stdin);	//Clears/Ignores newline characters for an input stream
         char choice = getch();
         if (choice == '1')
         {
-            goto checkpoint;
+            goto checkpoint;	//Flow of program jumps to label 'checkpoint'
         }
         else if (choice == '2')
         {
-            menu(*a); 
+            menu(*a); //menu() function call. The user is redirected back to menu.
         }
 	}
 	
-	history(a,0,a->phone,amount);
+	history(a,0,0,amount);	//Calling of history() function. Note that the second argument '0' represents the type of transaction, and the third argument '0' represents a null or meaningless integer value (since a different phone number is not involved when depositing money)
 	
-	a->balance += (double)amount;
+	a->balance += (double)amount;	//Increases balance by the inputted value of amount
 	
-	fptr = fopen(filename, "rb+");
+	fptr = fopen(filename, "rb+");	//Opens the file "filename" in read and write format
 	if(fptr == NULL)
 	{
-		printf("\nError: File not Found");
+		printf("\nError: File not Found");	//File handling error statement block
 		
 		sleep(1);
-		exit(1);
+		exit(1);	//Terminates the program immediately
 	}
 
-    fseek(fptr, 0L, SEEK_CUR);
-    fwrite(a, sizeof(struct account), 1, fptr);
+    fseek(fptr, 0L, SEEK_CUR);	//Positions the file pointer to the current position in the file. The offset parameter 0L indicates zero bytes offset, hence file pointer is not moved
+    fwrite(a, sizeof(struct account), 1, fptr);	//Writes the data of 'a' to the file pointed by fptr
     
-	fclose(fptr);
+	fclose(fptr);	//Closing the file
 	
 	printf("Your amount has been successfully deposited!");
 	
 	sleep(1);
 	
-	balanceInq(*a);
+	balanceInq(*a);	//Redirects to balance inquiry page
 }
 
-void withdraw(struct account *a)
+void withdraw(struct account *a)//Function definition for withdraw()
 {
 	FILE *fptr;
 	
@@ -439,13 +441,13 @@ void withdraw(struct account *a)
 	printf("\n\nEnter the amount you want to withdraw: ");
 	scanf("%d", &amount);
 	
-	if((double)amount>a->balance)
+	if((double)amount>a->balance)	//Typecasting of 'amount' is necessary since a->balance is in format double
 	{
 		printf("\n\nThe entered amount exceeds your bank balance. Please try again!");
 		
 		sleep(1);
 		
-		goto amountinput;
+		goto amountinput;	//Flow jumps to label 'amountinput'
 	}
 	else if(amount<=0)
 	{
@@ -468,9 +470,10 @@ void withdraw(struct account *a)
         }
 	}else
 	{
-		history(a,1,a->phone,amount);
+		history(a,1,0,amount);	//Calling of history() function. Note that the second argument '1' represents the type of transaction, and the third argument '0' represents a null or meaningless integer value (since a different phone number is not involved when withdrawing money)
+
 	
-		a->balance -= (double)amount;
+		a->balance -= (double)amount;	//Decreases balance by the inputted value of amount
 		
 		fptr = fopen(filename, "rb+");
 		if(fptr==NULL)
@@ -715,8 +718,8 @@ void displayhistory(struct account *a)
 	rewind(fptr);
 	while(feof(fptr) == 0)
 	{
-		fscanf(fptr, "%c", &c);
-		printf("%c", c);
+		fscanf(fptr, "%c", &c);		//A character from the file is stored in the variable 'c'.
+		printf("%c", c); 	//The stored character is displayed on the output screen.
 	}
 	
 	fclose(fptr);
@@ -734,7 +737,7 @@ void displayhistory(struct account *a)
 		exitMessage();
 	}else
 	{
-		displayhistory(a);
+		displayhistory(a); 	//Any other input from the user will result in the same page being displayed again.
 	}
 }
 
